@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Preview — Sistema Açougue Sertanejo</title>
+  <style>
+    :root {
+      --charcoal: #17100b;
+      --brown: #342014;
+      --oxblood: #7b1d13;
+      --tomato: #b73625;
+      --gold: #d88b22;
+      --cream: #fff8ea;
+      --paper: #f4ead8;
+      --butcher: #fff4e3;
+      --sage: #58755b;
+      --green: #246b45;
+      --blue: #315b78;
+      --ink: #221913;
+      --muted: #71645a;
+      --line: #dac7ad;
+      --panel: #fffcf4;
+      --shadow: 0 18px 45px rgba(42, 25, 12, .13);
+      --r: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 82% 8%, rgba(123,29,19,.12), transparent 18rem),
+        linear-gradient(90deg, rgba(123,29,19,.06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(123,29,19,.04) 1px, transparent 1px),
+        var(--paper);
+      background-size: 28px 28px;
+      color: var(--ink);
+      font-family: "Trebuchet MS", Verdana, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    *:focus {
+      outline-color: var(--gold);
+    }
+
+    .receipt *:focus,
+    .receipt:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .shell {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.08), transparent 240px),
+        linear-gradient(180deg, var(--charcoal), var(--brown));
+      color: var(--cream);
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border-right: 5px solid var(--gold);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar::after {
+      content: "SERTANEJO";
+      position: absolute;
+      left: -26px;
+      bottom: 120px;
+      color: rgba(255,248,234,.035);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 58px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      transform: rotate(-90deg);
+      pointer-events: none;
+    }
+
+    .brand {
+      padding: 10px 6px 18px;
+      border-bottom: 1px solid rgba(255,248,234,.16);
+    }
+
+    .kicker {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .brand h1 {
+      margin-top: 7px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 32px;
+      line-height: .94;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin-top: 10px;
+      color: rgba(255,248,234,.66);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      border: 1px solid rgba(255,248,234,.14);
+      background: rgba(255,248,234,.06);
+      color: rgba(255,248,234,.78);
+      min-height: 52px;
+      border-radius: var(--r);
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: .14s ease;
+    }
+
+    .nav button.active {
+      background: var(--gold);
+      color: #21140c;
+      border-color: var(--gold);
+      box-shadow: 0 10px 22px rgba(216,139,34,.25);
+    }
+
+    .nav-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: rgba(255,248,234,.11);
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .nav button.active .nav-mark {
+      background: rgba(34,25,19,.14);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 14px;
+      border: 1px solid rgba(255,248,234,.14);
+      border-radius: var(--r);
+      background: rgba(255,248,234,.06);
+      color: rgba(255,248,234,.72);
+      font-size: 12px;
+      line-height: 1.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .topbar {
+      background: rgba(255,252,244,.92);
+      border-bottom: 1px solid var(--line);
+      padding: 16px clamp(18px, 3vw, 34px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(26px, 3vw, 42px);
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .topbar p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .shift-pill {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--butcher);
+      color: var(--brown);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .shift-pill i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(36,107,69,.13);
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      min-height: 48px;
+      border-radius: var(--r);
+      padding: 0 16px;
+      font-weight: 900;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn.primary {
+      background: var(--oxblood);
+      border-color: var(--oxblood);
+      color: var(--cream);
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 2px solid currentColor;
+      border-radius: 4px;
+      color: var(--oxblood);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transform: rotate(-2deg);
+      background: rgba(255,248,234,.68);
+    }
+
+    .main {
+      overflow: auto;
+      padding: clamp(16px, 3vw, 34px);
+    }
+
+    .view {
+      display: none;
+      animation: enter .22s ease-out;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .metrics {
+      grid-template-columns: 1.25fr 1.45fr .95fr 1.15fr;
+    }
+
+    .metric, .panel, .row-card {
+      background: rgba(255,252,244,.94);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      min-height: 148px;
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      align-items: end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric.urgent {
+      background: linear-gradient(135deg, #74190f, #a92d1f);
+      color: var(--cream);
+      border-color: #74190f;
+    }
+
+    .metric.urgent span,
+    .metric.urgent small {
+      color: rgba(255,248,234,.78);
+    }
+
+    .metric.payable {
+      background: #fff1df;
+      border-color: #c7771e;
+      border-left: 7px solid var(--gold);
+    }
+
+    .metric::after {
+      content: "";
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      right: -16px;
+      bottom: -18px;
+      border: 2px dashed rgba(123,29,19,.18);
+      transform: rotate(13deg);
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+    }
+
+    .metric strong {
+      font-family: "Trebuchet MS", Verdana, sans-serif;
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      align-self: center;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+
+    .metric small {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .metric.urgent small,
+    .metric.payable small.warn {
+      color: #ffd08a;
+    }
+
+    .metric.payable small.warn {
+      color: var(--red);
+    }
+
+    .split {
+      grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr);
+      margin-top: 14px;
+    }
+
+    .counter-strip {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .counter-item {
+      background: var(--charcoal);
+      color: var(--cream);
+      border-radius: var(--r);
+      min-height: 82px;
+      padding: 14px;
+      display: grid;
+      align-content: space-between;
+      border-bottom: 4px solid var(--gold);
+      box-shadow: 0 14px 28px rgba(34,25,19,.13);
+    }
+
+    .counter-item span {
+      color: rgba(255,248,234,.64);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .counter-item strong {
+      font-size: 18px;
+    }
+
+    .rough-note {
+      margin-top: 14px;
+      background: #fff7c8;
+      border: 1px solid #d7b45a;
+      border-left: 8px solid #b73625;
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      box-shadow: 0 10px 22px rgba(42, 25, 12, .08);
+    }
+
+    .rough-note strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .rough-note span {
+      color: #674f19;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .panel {
+      overflow: hidden;
+    }
+
+    .panel-head {
+      min-height: 64px;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(123,29,19,.08), transparent),
+        repeating-linear-gradient(135deg, rgba(216,139,34,.08) 0 7px, transparent 7px 14px);
+    }
+
+    .panel-head h3 {
+      font-size: 17px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .panel-head span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th, .table td {
+      padding: 15px 18px;
+      text-align: left;
+      border-bottom: 1px solid rgba(218,199,173,.72);
+      font-size: 14px;
+    }
+
+    .table th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .money {
+      font-weight: 900;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+      background: rgba(216,139,34,.14);
+      color: #7a470b;
+    }
+
+    .tag.red {
+      background: rgba(191,59,42,.12);
+      color: var(--red);
+    }
+
+    .tag.hot {
+      background: var(--red);
+      color: #fff8ea !important;
+      border: 1px solid #8f1e12;
+      box-shadow: 0 7px 14px rgba(184,51,36,.22);
+      text-shadow: none;
+    }
+
+    .table .tag.hot,
+    .rough-note .tag.hot {
+      background: #b83324;
+      color: #fff8ea !important;
+      min-width: max-content;
+    }
+
+    .tag.green {
+      background: rgba(36,107,69,.12);
+      color: var(--green);
+    }
+
+    .tag.blue {
+      background: rgba(49,91,120,.12);
+      color: var(--blue);
+    }
+
+    .steps {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .step b {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--oxblood);
+      color: var(--cream);
+      font-size: 13px;
+    }
+
+    .step strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .step small {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .search {
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--panel);
+      padding: 0 16px;
+      font-weight: 800;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--oxblood);
+      box-shadow: 0 0 0 4px rgba(123,29,19,.08);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .row-card {
+      padding: 16px;
+      min-height: 154px;
+      display: grid;
+      gap: 12px;
+      align-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .row-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 6px;
+      background: var(--oxblood);
+      opacity: .9;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--oxblood);
+      color: var(--cream);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .person strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .person small {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .card-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .card-line b {
+      color: var(--ink);
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .sale-pad {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+      gap: 14px;
+    }
+
+    .quick-form {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .field input {
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--panel);
+      padding: 0 14px;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .segmented button {
+      min-height: 50px;
+      border-radius: var(--r);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .segmented button.active {
+      background: var(--oxblood);
+      color: var(--cream);
+      border-color: var(--oxblood);
+    }
+
+    .receipt {
+      background:
+        linear-gradient(#fffaf0, #fffaf0) padding-box,
+        repeating-linear-gradient(90deg, transparent 0 12px, rgba(123,29,19,.14) 12px 13px) border-box;
+      border-left: 5px solid var(--gold);
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      min-height: 100%;
+    }
+
+    .receipt h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px dashed var(--line);
+      padding-bottom: 9px;
+      color: var(--muted);
+    }
+
+    .receipt-row b {
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .receipt-total {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      font-family: "Trebuchet MS", Verdana, sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      border-top: 2px solid var(--ink);
+      padding-top: 18px;
+      outline: none;
+    }
+
+    .receipt-total span:last-child {
+      min-width: 190px;
+      text-align: right;
+      font-size: 28px;
+      letter-spacing: -0.3px;
+      outline: none;
+      box-shadow: none;
+    }
+
+    .bar-list {
+      padding: 18px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr) 110px;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .bar-row b {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .permission-grid {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.1fr repeat(4, minmax(92px, .7fr));
+      gap: 8px;
+      align-items: stretch;
+      min-width: 720px;
+    }
+
+    .perm-cell {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      background: rgba(255,248,234,.72);
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .perm-cell.head {
+      background: var(--charcoal);
+      color: var(--cream);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      font-size: 11px;
+    }
+
+    .perm-cell.action {
+      justify-content: start;
+      place-items: center start;
+      text-align: left;
+      color: var(--brown);
+    }
+
+    .perm-yes {
+      color: var(--green);
+    }
+
+    .perm-no {
+      color: var(--red);
+    }
+
+    .audit-note {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .client-profile {
+      display: grid;
+      grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .profile-card {
+      padding: 18px;
+      background: rgba(255,252,244,.94);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .profile-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .profile-name .avatar {
+      width: 54px;
+      height: 54px;
+    }
+
+    .profile-name h3 {
+      font-size: 24px;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1;
+    }
+
+    .data-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(218,199,173,.9);
+      padding-bottom: 8px;
+    }
+
+    .data-row span {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .data-row b {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pay-box {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pay-option {
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--panel);
+      min-height: 86px;
+      padding: 13px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .pay-option span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    .pay-option strong {
+      font-size: 20px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pdv-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr);
+      gap: 14px;
+    }
+
+    .pdv-pad {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .big-entry {
+      min-height: 92px;
+      border: 2px solid var(--oxblood);
+      border-radius: var(--r);
+      background: #fffaf0;
+      padding: 12px 16px;
+      display: grid;
+      align-content: center;
+    }
+
+    .big-entry span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .big-entry strong {
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .quick-products {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .product-key {
+      min-height: 72px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--r);
+      padding: 10px;
+      text-align: left;
+      display: grid;
+      align-content: space-between;
+      cursor: pointer;
+    }
+
+    .product-key strong {
+      font-size: 15px;
+    }
+
+    .product-key span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .pdv-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .pdv-actions .btn {
+      min-height: 62px;
+    }
+
+    .shortcut-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .keycap {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-bottom-width: 3px;
+      border-radius: 6px;
+      background: #fffaf0;
+      color: var(--brown);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .keycap b {
+      font-size: 11px;
+      color: var(--oxblood);
+      letter-spacing: .5px;
+    }
+
+    .flash {
+      animation: flashKey .42s ease-out;
+    }
+
+    @keyframes flashKey {
+      0% { box-shadow: 0 0 0 0 rgba(216,139,34,.65); transform: translateY(0); }
+      45% { box-shadow: 0 0 0 8px rgba(216,139,34,.12); transform: translateY(-1px); }
+      100% { box-shadow: none; transform: translateY(0); }
+    }
+
+    .bar {
+      height: 12px;
+      background: rgba(218,199,173,.72);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--oxblood), var(--gold));
+      border-radius: inherit;
+    }
+
+    .mobile-nav {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        grid-template-columns: 1fr;
+        padding-bottom: 72px;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .action-row {
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .metrics, .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .counter-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .rough-note {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .split, .sale-pad {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 4px;
+        background: var(--charcoal);
+        border-top: 4px solid var(--gold);
+        padding: 7px;
+        z-index: 50;
+      }
+
+      .mobile-nav button {
+        min-height: 54px;
+        border: 0;
+        border-radius: 6px;
+        background: rgba(255,248,234,.08);
+        color: rgba(255,248,234,.82);
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .mobile-nav button.active {
+        background: var(--gold);
+        color: var(--charcoal);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .main {
+        padding: 12px;
+      }
+
+      .topbar {
+        padding: 14px;
+      }
+
+      .topbar h2 {
+        font-size: 28px;
+      }
+
+      .metrics, .cards, .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .counter-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .table {
+        min-width: 620px;
+      }
+
+      .panel.table-wrap {
+        overflow-x: auto;
+      }
+
+      .segmented {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .mobile-nav {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .client-profile,
+      .pay-box,
+      .pdv-layout,
+      .quick-products {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="kicker">Balcão em controle</div>
+        <h1>Açougue Sertanejo</h1>
+        <p>Do caderno para um painel de balcão: fiado, caixa, compras e produção no mesmo ritmo da loja.</p>
+      </div>
+
+      <nav class="nav" id="sideNav">
+        <button class="active" data-view="dashboard"><span class="nav-mark">01</span>Visão do dono</button>
+        <button data-view="config"><span class="nav-mark">02</span>Configurações</button>
+        <button data-view="clientes"><span class="nav-mark">03</span>Clientes</button>
+        <button data-view="fiado"><span class="nav-mark">04</span>Caderneta fiado</button>
+        <button data-view="venda"><span class="nav-mark">05</span>Venda rápida</button>
+        <button data-view="caixa"><span class="nav-mark">06</span>Fechamento caixa</button>
+        <button data-view="compras"><span class="nav-mark">07</span>Compras</button>
+        <button data-view="producao"><span class="nav-mark">08</span>Produção</button>
+        <button data-view="vendedores"><span class="nav-mark">09</span>Equipe</button>
+      </nav>
+
+      <div class="sidebar-footer">Visão do dono. Outros usuários enxergam só o que a permissão liberar.</div>
+    </aside>
+
+    <section class="content">
+      <header class="topbar">
+        <div>
+          <div class="kicker" id="viewKicker">Painel gerencial</div>
+          <h2 id="viewTitle">Visão do dono</h2>
+          <p id="viewSubtitle">Hoje, caixa, fiado, equipe e compras em uma tela.</p>
+        </div>
+        <div class="action-row">
+          <div class="shift-pill"><i></i>Balcão aberto · 06:14</div>
+          <button class="btn">Relatório do dia</button>
+          <button class="btn primary">Lançar agora</button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="view active" id="dashboard">
+          <div class="grid metrics">
+            <article class="metric">
+              <span>Venda hoje</span>
+              <strong>R$ 4.870,00</strong>
+              <small>-6% vs. ontem</small>
+            </article>
+            <article class="metric urgent">
+              <span>Fiado aberto</span>
+              <strong>R$ 18.240,00</strong>
+              <small>11 clientes passaram de 30 dias</small>
+            </article>
+            <article class="metric">
+              <span>Caixa conferido</span>
+              <strong>R$ 3.920,00</strong>
+              <small>Falta conferir balcão 2</small>
+            </article>
+            <article class="metric payable">
+              <span>A pagar</span>
+              <strong>R$ 9.680,00</strong>
+              <small class="warn">R$ 4.800,00 vence amanhã</small>
+            </article>
+          </div>
+
+          <div class="counter-strip">
+            <div class="counter-item"><span>Balcão 1</span><strong>Carlim · atendendo</strong></div>
+            <div class="counter-item"><span>Balcão 2</span><strong>Rafa · R$ 637,00 no caixa</strong></div>
+            <div class="counter-item"><span>Produção</span><strong>Linguiça falta tempero</strong></div>
+            <div class="counter-item"><span>Caderno antigo</span><strong>3 apelidos sem telefone</strong></div>
+          </div>
+
+          <div class="rough-note">
+            <div>
+              <strong>Pendência que normalmente some no caderno</strong>
+              <span>Cliente pagou R$ 80,00 no PIX, ficou R$ 47,00 no fiado. Falta vincular no nome certo.</span>
+            </div>
+            <span class="tag hot">Resolver antes de fechar</span>
+          </div>
+
+          <div class="grid split">
+            <section class="panel table-wrap">
+              <div class="panel-head">
+                <h3>Alertas do dia</h3>
+                <span class="stamp">Olhar antes de fechar</span>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr><th>Item</th><th>Motivo</th><th>Status</th><th>Ação</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Rosinha do posto</td><td>Fiado há 32 dias</td><td><span class="tag red hot">Cobrar hoje</span></td><td>Mandar recado antes da feira</td></tr>
+                  <tr><td>Frigorífico São João</td><td>Parcela vence amanhã</td><td><span class="tag red">Separar dinheiro</span></td><td>Envelope R$ 4.800,00</td></tr>
+                  <tr><td>Linguiça caseira</td><td>Estoque baixo</td><td><span class="tag blue">Produzir</span></td><td>Planejar 35,0 kg</td></tr>
+                  <tr><td>Caixa balcão 2</td><td>Sangria pendente</td><td><span class="tag red hot">Conferir</span></td><td>Contar antes da troca</td></tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Caminho sem travar a loja</h3>
+                <span>Fatia por fatia</span>
+              </div>
+              <div class="steps">
+                <div class="step"><b>1</b><div><strong>Fiado digital</strong><small>Cliente, apelido, lançamentos, pagamentos e saldo.</small></div></div>
+                <div class="step"><b>2</b><div><strong>Fechamento diário</strong><small>Dinheiro, PIX, cartão, sangria e conferência.</small></div></div>
+                <div class="step"><b>3</b><div><strong>Dono no controle</strong><small>Compras, despesas, fornecedores e visão de caixa.</small></div></div>
+                <div class="step"><b>4</b><div><strong>PDV completo</strong><small>Vendas por vendedor, peso, comissão e balança.</small></div></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="clientes">
+          <div class="toolbar">
+            <input class="search" placeholder="Buscar cliente por apelido, nome, telefone ou referência">
+            <button class="btn">Editar cadastro</button>
+            <button class="btn primary">Novo cliente</button>
+          </div>
+
+          <div class="client-profile">
+            <aside class="profile-card">
+              <div class="profile-name">
+                <div class="avatar">R</div>
+                <div>
+                  <h3>Rosinha</h3>
+                  <span class="audit-note">Dona Maria do posto · cliente fiado</span>
+                </div>
+              </div>
+              <div class="data-list">
+                <div class="data-row"><span>Nome completo</span><b>Maria José da Silva</b></div>
+                <div class="data-row"><span>Telefone</span><b>(87) 9 8877-1420</b></div>
+                <div class="data-row"><span>Referência</span><b>Casa atrás do posto</b></div>
+                <div class="data-row"><span>Autorizados</span><b>Filha Ana, marido João</b></div>
+                <div class="data-row"><span>Limite combinado</span><b>R$ 800,00</b></div>
+                <div class="data-row"><span>Saldo atual</span><b>R$ 740,00</b></div>
+                <div class="data-row"><span>Último pagamento</span><b>R$ 150,00 · 04/06</b></div>
+              </div>
+              <span class="tag hot">32 dias com atraso</span>
+            </aside>
+
+            <section class="panel table-wrap">
+              <div class="panel-head">
+                <h3>Histórico do cliente</h3>
+                <span>Compras, pagamentos e ajustes</span>
+              </div>
+              <table class="table">
+                <thead><tr><th>Data</th><th>Tipo</th><th>Valor</th><th>Forma</th><th>Responsável</th></tr></thead>
+                <tbody>
+                  <tr><td>Hoje, 09:42</td><td>Compra mista</td><td class="money">R$ 127,00</td><td>R$ 80,00 PIX + R$ 47,00 fiado</td><td>Carlim</td></tr>
+                  <tr><td>04/06</td><td>Pagamento parcial</td><td class="money">R$ 150,00</td><td>Dinheiro</td><td>Rafa</td></tr>
+                  <tr><td>31/05</td><td>Compra fiado</td><td class="money">R$ 236,00</td><td>Fiado</td><td>Carlim</td></tr>
+                  <tr><td>28/05</td><td>Compra fiado</td><td class="money">R$ 112,00</td><td>Fiado</td><td>Paulo</td></tr>
+                  <tr><td>20/05</td><td>Ajuste autorizado</td><td class="money">- R$ 25,00</td><td>Desconto</td><td>Leandro</td></tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+
+          <section class="panel" style="margin-top:14px">
+            <div class="panel-head">
+              <h3>Baixa do fiado</h3>
+              <span>Total ou parcial, sempre com responsável</span>
+            </div>
+            <div class="quick-form">
+              <div class="pay-box">
+                <div class="pay-option"><span>Saldo em aberto</span><strong>R$ 740,00</strong></div>
+                <div class="pay-option"><span>Baixa total</span><strong>R$ 740,00</strong></div>
+                <div class="pay-option"><span>Baixa parcial</span><strong>R$ 150,00</strong></div>
+              </div>
+              <div class="field"><label>Valor recebido agora</label><input value="R$ 150,00"></div>
+              <div class="segmented">
+                <button class="active">Dinheiro</button>
+                <button>PIX</button>
+                <button>Cartão</button>
+                <button>Ajuste</button>
+              </div>
+              <button class="btn primary">Registrar baixa parcial</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="fiado">
+          <div class="toolbar">
+            <input class="search" id="fiadoSearch" placeholder="Buscar: Rosinha, do posto, telefone, apelido...">
+            <button class="btn">Baixar pagamento</button>
+            <button class="btn primary">Anotar fiado</button>
+          </div>
+          <div class="cards" id="fiadoCards">
+            <article class="row-card" data-name="rosinha dona maria posto">
+              <div class="person"><div class="avatar">R</div><div><strong>Rosinha</strong><small>Dona Maria do posto</small></div></div>
+              <div class="card-line"><span>Saldo em aberto</span><b>R$ 740,00</b></div>
+              <div class="card-line"><span>Última compra</span><span>Hoje, 09:42</span></div>
+              <span class="tag hot">32 dias com atraso</span>
+            </article>
+            <article class="row-card" data-name="ze da besta jose carlos feira">
+              <div class="person"><div class="avatar">Z</div><div><strong>Zé da Besta</strong><small>José Carlos · feira</small></div></div>
+              <div class="card-line"><span>Saldo em aberto</span><b>R$ 220,00</b></div>
+              <div class="card-line"><span>Última compra</span><span>Ontem, 18:10</span></div>
+              <span class="tag green">Paga sábado</span>
+            </article>
+            <article class="row-card" data-name="neguinha escola lucia professora">
+              <div class="person"><div class="avatar">N</div><div><strong>Neguinha da escola</strong><small>Lúcia · professora</small></div></div>
+              <div class="card-line"><span>Saldo em aberto</span><b>R$ 98,00</b></div>
+              <div class="card-line"><span>Última compra</span><span>Sábado</span></div>
+              <span class="tag">Recebe dia 10</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="venda">
+          <div class="pdv-layout">
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Venda rápida de balcão</h3>
+                <span class="stamp">Poucos toques</span>
+              </div>
+              <div class="pdv-pad">
+                <div class="shortcut-row">
+                  <span class="keycap"><b>F1</b> Venda</span>
+                  <span class="keycap"><b>F2</b> Cliente</span>
+                  <span class="keycap"><b>F3</b> Valor direto</span>
+                  <span class="keycap"><b>F4</b> Finalizar</span>
+                  <span class="keycap"><b>F6</b> Fiado</span>
+                  <span class="keycap"><b>ESC</b> Limpar</span>
+                </div>
+                <div class="field"><label>Cliente opcional</label><input id="pdvCliente" value="Rosinha · Dona Maria do posto"></div>
+                <div class="big-entry" id="pdvTotalBox">
+                  <span>Total da venda</span>
+                  <strong>R$ 127,00</strong>
+                </div>
+                <div class="quick-products">
+                  <button class="product-key"><strong>Carne bovina</strong><span>peso × preço/kg</span></button>
+                  <button class="product-key"><strong>Suíno</strong><span>peso × preço/kg</span></button>
+                  <button class="product-key"><strong>Linguiça</strong><span>produto pronto</span></button>
+                  <button class="product-key"><strong>Charque</strong><span>produto pronto</span></button>
+                  <button class="product-key"><strong>Valor direto</strong><span>quando vem da balança</span></button>
+                  <button class="product-key"><strong>Desconto</strong><span>só com permissão</span></button>
+                </div>
+                <div class="segmented">
+                  <button class="active">PIX</button>
+                  <button>Dinheiro</button>
+                  <button>Cartão</button>
+                  <button>Fiado</button>
+                </div>
+                <div class="pdv-actions">
+                  <button class="btn" id="btnFiado">Adicionar parte no fiado</button>
+                  <button class="btn primary" id="btnFinalizar">Finalizar venda</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="receipt">
+                <h3>Resumo da venda</h3>
+                <div class="receipt-row"><span>Carne bovina</span><b>R$ 82,00</b></div>
+                <div class="receipt-row"><span>Linguiça caseira</span><b>R$ 45,00</b></div>
+                <div class="receipt-row"><span>Pago no PIX</span><b>R$ 80,00</b></div>
+                <div class="receipt-row"><span>Vai para fiado</span><b>R$ 47,00</b></div>
+                <div class="receipt-total"><span>Total</span><span>R$ 127,00</span></div>
+                <div class="steps">
+                  <div class="audit-note">Ao finalizar, o sistema registra vendedor, cliente, forma de pagamento, parte fiado e horário. Se for usuário sem permissão, desconto e estorno ficam bloqueados.</div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="caixa">
+          <div class="sale-pad">
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Lançamento de balcão</h3>
+                <span class="stamp">5 segundos</span>
+              </div>
+              <div class="quick-form">
+                <div class="field"><label>Cliente</label><input value="Rosinha"></div>
+                <div class="field"><label>Valor total da compra</label><input value="R$ 127,00"></div>
+                <div class="field"><label>Entrada paga</label><input value="R$ 80,00"></div>
+                <div class="field">
+                  <label>Forma de pagamento</label>
+                  <div class="segmented">
+                    <button class="active">PIX</button>
+                    <button>Dinheiro</button>
+                    <button>Cartão</button>
+                    <button>Fiado</button>
+                  </div>
+                </div>
+                <button class="btn primary">Registrar venda mista</button>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="receipt">
+                <h3>Envelope do dia</h3>
+                <div class="receipt-row"><span>Dinheiro</span><b>R$ 1.280,00</b></div>
+                <div class="receipt-row"><span>PIX</span><b>R$ 1.940,00</b></div>
+                <div class="receipt-row"><span>Cartão</span><b>R$ 700,00</b></div>
+                <div class="receipt-row"><span>Sangria feita</span><b>- R$ 900,00</b></div>
+                <div class="receipt-total"><span>Total recebido</span><span>R$ 3.920,00</span></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="vendedores">
+          <div class="grid split">
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Placar do balcão</h3>
+                <span>Hoje · sem briga por cliente</span>
+              </div>
+              <div class="bar-list">
+                <div class="bar-row"><strong>Carlim</strong><div class="bar"><i style="width:88%"></i></div><b>R$ 1.620,00</b></div>
+                <div class="bar-row"><strong>Rafa</strong><div class="bar"><i style="width:74%"></i></div><b>R$ 1.360,00</b></div>
+                <div class="bar-row"><strong>Nando</strong><div class="bar"><i style="width:66%"></i></div><b>R$ 1.110,00</b></div>
+                <div class="bar-row"><strong>Paulo</strong><div class="bar"><i style="width:41%"></i></div><b>R$ 690,00</b></div>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Regras saudáveis</h3>
+                <span>Para não distorcer equipe</span>
+              </div>
+              <div class="steps">
+                <div class="step"><b>1</b><div><strong>Meta de time</strong><small>Evita disputa ruim entre balcão e produção.</small></div></div>
+                <div class="step"><b>2</b><div><strong>Vendedor registrado</strong><small>Cada venda tem responsável e horário.</small></div></div>
+                <div class="step"><b>3</b><div><strong>Fiado separado</strong><small>Não confundir venda com dinheiro recebido.</small></div></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="compras">
+          <section class="panel table-wrap">
+            <div class="panel-head">
+              <h3>Fornecedores e contas a pagar</h3>
+              <span class="stamp">Não esquecer vencimento</span>
+            </div>
+            <table class="table">
+              <thead><tr><th>Fornecedor</th><th>Compra</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Frigorífico São João</td><td>Boi inteiro</td><td>Amanhã</td><td class="money">R$ 4.800,00</td><td><span class="tag hot">Vence logo</span></td></tr>
+                <tr><td>Mercado embalagens</td><td>Sacos e bobinas</td><td>12/06</td><td class="money">R$ 680,00</td><td><span class="tag">Aberto</span></td></tr>
+                <tr><td>Fornecedor suíno</td><td>Carne suína por kg</td><td>15/06</td><td class="money">R$ 4.200,00</td><td><span class="tag blue">Programado</span></td></tr>
+                <tr><td>Manutenção</td><td>Serra fita</td><td>Pago</td><td class="money">R$ 348,00</td><td><span class="tag green">Pago</span></td></tr>
+              </tbody>
+            </table>
+          </section>
+        </section>
+
+        <section class="view" id="producao">
+          <div class="grid metrics">
+            <article class="metric"><span>Linguiça semana</span><strong>63,8 kg</strong><small>Produção própria</small></article>
+            <article class="metric"><span>Charque semana</span><strong>27,6 kg</strong><small>Rendimento medido</small></article>
+            <article class="metric payable"><span>Perda estimada</span><strong>R$ 420,00</strong><small class="warn">Descarte + validade</small></article>
+            <article class="metric"><span>Retirada interna</span><strong>R$ 185,00</strong><small>Dono/equipe</small></article>
+          </div>
+          <section class="panel table-wrap" style="margin-top:14px">
+            <div class="panel-head">
+              <h3>Bancada de produção</h3>
+              <span>Sem controlar corte por corte</span>
+            </div>
+            <table class="table">
+              <thead><tr><th>Produto</th><th>Entrada</th><th>Saída</th><th>Perda</th><th>Observação</th></tr></thead>
+              <tbody>
+                <tr><td>Carne para linguiça</td><td>78,0 kg</td><td>64,0 kg</td><td>4,0 kg</td><td>Produção terça-feira</td></tr>
+                <tr><td>Charque</td><td>35,0 kg</td><td>28,0 kg</td><td>2,0 kg</td><td>Secagem normal</td></tr>
+                <tr><td>Cortes diversos</td><td>R$ 6.900,00</td><td>R$ 5.820,00</td><td>R$ 310,00</td><td>Perda anotada por valor</td></tr>
+              </tbody>
+            </table>
+          </section>
+        </section>
+
+        <section class="view" id="config">
+          <div class="grid metrics">
+            <article class="metric urgent">
+              <span>Ações sensíveis</span>
+              <strong>100%</strong>
+              <small>Com usuário, data e horário</small>
+            </article>
+            <article class="metric">
+              <span>Usuários ativos</span>
+              <strong>6</strong>
+              <small>1 dono, 1 gerente, 4 balcão</small>
+            </article>
+            <article class="metric payable">
+              <span>Bloqueios</span>
+              <strong>3</strong>
+              <small class="warn">Apagar dívida, ver lucro, alterar caixa</small>
+            </article>
+            <article class="metric">
+              <span>Último acesso</span>
+              <strong>09:42</strong>
+              <small>Carlim lançou venda mista</small>
+            </article>
+          </div>
+
+          <div class="grid split">
+            <section class="panel table-wrap">
+              <div class="panel-head">
+                <h3>Usuários da loja</h3>
+                <span>O dono cria e bloqueia acessos</span>
+              </div>
+              <table class="table">
+                <thead><tr><th>Usuário</th><th>Perfil</th><th>Pode ver</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Leandro</td><td>Dono</td><td>Tudo: caixa, DRE, despesas, usuários</td><td><span class="tag green">Ativo</span></td></tr>
+                  <tr><td>Rafa</td><td>Gerente</td><td>Caixa, fiado, fechamento e compras</td><td><span class="tag green">Ativo</span></td></tr>
+                  <tr><td>Carlim</td><td>Balconista</td><td>Clientes, fiado e venda de balcão</td><td><span class="tag">Limitado</span></td></tr>
+                  <tr><td>Nando</td><td>Produção</td><td>Produção, perdas e retirada interna</td><td><span class="tag">Limitado</span></td></tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Regra principal</h3>
+                <span class="stamp">Sem achismo</span>
+              </div>
+              <div class="steps">
+                <div class="step"><b>1</b><div><strong>Cada pessoa tem senha própria</strong><small>Não existe “senha do balcão” compartilhada.</small></div></div>
+                <div class="step"><b>2</b><div><strong>Balconista não apaga dívida</strong><small>Erro vira ajuste com motivo, não desaparece.</small></div></div>
+                <div class="step"><b>3</b><div><strong>Dono vê lucro e despesas</strong><small>Equipe opera; dono enxerga dinheiro.</small></div></div>
+                <div class="step"><b>4</b><div><strong>Histórico guarda tudo</strong><small>Quem fez, o que mudou, quando mudou e de qual tela.</small></div></div>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel table-wrap" style="margin-top:14px">
+            <div class="panel-head">
+              <h3>Matriz de permissões</h3>
+              <span>Simples para começar, forte onde importa</span>
+            </div>
+            <div class="permission-grid">
+              <div class="perm-cell head">Ação</div>
+              <div class="perm-cell head">Dono</div>
+              <div class="perm-cell head">Gerente</div>
+              <div class="perm-cell head">Balcão</div>
+              <div class="perm-cell head">Produção</div>
+
+              <div class="perm-cell action">Lançar fiado</div>
+              <div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-no">Não</div>
+
+              <div class="perm-cell action">Registrar pagamento</div>
+              <div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-no">Não</div>
+
+              <div class="perm-cell action">Apagar ou perdoar dívida</div>
+              <div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-no">Não</div><div class="perm-cell perm-no">Não</div><div class="perm-cell perm-no">Não</div>
+
+              <div class="perm-cell action">Fechar caixa e sangria</div>
+              <div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-no">Não</div><div class="perm-cell perm-no">Não</div>
+
+              <div class="perm-cell action">Ver DRE, lucro e despesas</div>
+              <div class="perm-cell perm-yes">Sim</div><div class="perm-cell perm-no">Não</div><div class="perm-cell perm-no">Não</div><div class="perm-cell perm-no">Não</div>
+            </div>
+          </section>
+
+          <section class="panel table-wrap" style="margin-top:14px">
+            <div class="panel-head">
+              <h3>Histórico de auditoria</h3>
+              <span>Para apontar fato, não suspeita</span>
+            </div>
+            <table class="table">
+              <thead><tr><th>Horário</th><th>Usuário</th><th>Ação</th><th>Detalhe</th><th>Origem</th></tr></thead>
+              <tbody>
+                <tr><td>09:42</td><td>Carlim</td><td>Venda mista</td><td>Rosinha: R$ 80,00 PIX + R$ 47,00 fiado</td><td>Balcão 1</td></tr>
+                <tr><td>10:08</td><td>Rafa</td><td>Sangria</td><td>Retirou R$ 900,00 do caixa</td><td>Balcão 2</td></tr>
+                <tr><td>10:21</td><td>Leandro</td><td>Permissão</td><td>Bloqueou “apagar dívida” para balconistas</td><td>Configurações</td></tr>
+                <tr><td>10:34</td><td>Nando</td><td>Perda</td><td>Registrou 2,0 kg de charque descartado</td><td>Produção</td></tr>
+              </tbody>
+            </table>
+            <div class="steps">
+              <div class="audit-note">Na versão real, cada registro também guarda ID do usuário, data completa, valor antigo, valor novo e motivo quando a ação for sensível.</div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <button class="active" data-view="dashboard">Dono</button>
+    <button data-view="config">Acesso</button>
+    <button data-view="clientes">Clientes</button>
+    <button data-view="fiado">Fiado</button>
+    <button data-view="venda">Venda</button>
+    <button data-view="caixa">Caixa</button>
+    <button data-view="compras">Compras</button>
+    <button data-view="producao">Produção</button>
+    <button data-view="vendedores">Equipe</button>
+  </nav>
+
+  <script>
+    const meta = {
+      dashboard: ['Painel gerencial', 'Visão do dono', 'Hoje, caixa, fiado, equipe e compras em uma tela.'],
+      clientes: ['Cadastro e histórico', 'Dados dos clientes', 'Ficha completa para consultar saldo, compras e baixar fiado total ou parcial.'],
+      fiado: ['Caderneta digital', 'Fiado sem chamar o dono', 'Busca por apelido, referência, telefone e saldo em aberto.'],
+      venda: ['Balcão', 'Venda rápida', 'Tela principal para vender em poucos toques, com cliente opcional e pagamento misto.'],
+      caixa: ['Fechamento diário', 'Caixa e recebimento', 'Dinheiro, PIX, cartão, sangria e venda mista no mesmo fluxo.'],
+      vendedores: ['Equipe', 'Venda por vendedor', 'Métrica para comissão sem quebrar o trabalho em equipe.'],
+      compras: ['Fornecedor', 'Compras e contas a pagar', 'Vencimentos, compra a prazo e custo entrando no controle.'],
+      producao: ['Produção própria', 'Linguiça, charque e perdas', 'Controle por categoria e valor, sem virar estoque impossível.'],
+      config: ['Base do sistema', 'Configurações e permissões', 'Cada usuário tem senha própria e cada ação sensível fica registrada.']
+    };
+
+    function setView(id) {
+      document.querySelectorAll('.view').forEach(view => view.classList.toggle('active', view.id === id));
+      document.querySelectorAll('[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === id));
+      document.getElementById('viewKicker').textContent = meta[id][0];
+      document.getElementById('viewTitle').textContent = meta[id][1];
+      document.getElementById('viewSubtitle').textContent = meta[id][2];
+      document.querySelector('.main').scrollTop = 0;
+    }
+
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => setView(btn.dataset.view));
+    });
+
+    document.querySelectorAll('.segmented button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.parentElement.querySelectorAll('button').forEach(item => item.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    document.getElementById('fiadoSearch').addEventListener('input', event => {
+      const term = event.target.value.trim().toLowerCase();
+      document.querySelectorAll('#fiadoCards .row-card').forEach(card => {
+        card.style.display = card.dataset.name.includes(term) ? '' : 'none';
+      });
+    });
+
+    function flash(el) {
+      if (!el) return;
+      el.classList.remove('flash');
+      void el.offsetWidth;
+      el.classList.add('flash');
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      const key = event.key.toLowerCase();
+      if (!['f1', 'f2', 'f3', 'f4', 'f6', 'escape'].includes(key)) return;
+      event.preventDefault();
+
+      if (key === 'f1') {
+        setView('venda');
+        flash(document.getElementById('pdvTotalBox'));
+      }
+      if (key === 'f2') {
+        setView('venda');
+        document.getElementById('pdvCliente')?.focus();
+      }
+      if (key === 'f3') {
+        setView('venda');
+        flash(document.querySelector('.product-key:nth-child(5)'));
+      }
+      if (key === 'f4') {
+        setView('venda');
+        flash(document.getElementById('btnFinalizar'));
+      }
+      if (key === 'f6') {
+        setView('venda');
+        flash(document.getElementById('btnFiado'));
+      }
+      if (key === 'escape') {
+        setView('venda');
+        flash(document.getElementById('pdvTotalBox'));
+      }
+    });
+  </script>
+</body>
+</html>
