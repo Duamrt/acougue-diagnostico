@@ -487,27 +487,90 @@
 </div>
 
 <div class="tab-nav" id="tabNav">
-  <button class="tab-btn active" onclick="ir(0)"><span class="tab-index">01</span><span class="tab-name">Fiado</span></button>
-  <button class="tab-btn" onclick="ir(1)"><span class="tab-index">02</span><span class="tab-name">Caixa</span></button>
-  <button class="tab-btn" onclick="ir(2)"><span class="tab-index">03</span><span class="tab-name">Equipe</span></button>
-  <button class="tab-btn" onclick="ir(3)"><span class="tab-index">04</span><span class="tab-name">Compras</span></button>
-  <button class="tab-btn" onclick="ir(4)"><span class="tab-index">05</span><span class="tab-name">Negócio</span></button>
-  <button class="tab-btn" onclick="ir(5)"><span class="tab-index">06</span><span class="tab-name">Hardware</span></button>
-  <button class="tab-btn" onclick="ir(6)"><span class="tab-index">07</span><span class="tab-name">Local</span></button>
-  <button class="tab-btn" onclick="ir(7)"><span class="tab-index">08</span><span class="tab-name">Notas</span></button>
+  <button class="tab-btn active" onclick="ir(0)"><span class="tab-index">01</span><span class="tab-name">Acesso</span></button>
+  <button class="tab-btn" onclick="ir(1)"><span class="tab-index">02</span><span class="tab-name">Clientes</span></button>
+  <button class="tab-btn" onclick="ir(2)"><span class="tab-index">03</span><span class="tab-name">Venda</span></button>
+  <button class="tab-btn" onclick="ir(3)"><span class="tab-index">04</span><span class="tab-name">Fiado</span></button>
+  <button class="tab-btn" onclick="ir(4)"><span class="tab-index">05</span><span class="tab-name">Caixa</span></button>
+  <button class="tab-btn" onclick="ir(5)"><span class="tab-index">06</span><span class="tab-name">Compras</span></button>
+  <button class="tab-btn" onclick="ir(6)"><span class="tab-index">07</span><span class="tab-name">Produção</span></button>
+  <button class="tab-btn" onclick="ir(7)"><span class="tab-index">08</span><span class="tab-name">Despesas</span></button>
+  <button class="tab-btn" onclick="ir(8)"><span class="tab-index">09</span><span class="tab-name">Piloto</span></button>
+  <button class="tab-btn" onclick="ir(9)"><span class="tab-index">10</span><span class="tab-name">Notas</span></button>
 </div>
 
 <div class="main">
 
-  <!-- 01 FIADO -->
+  <!-- 01 ACESSO -->
   <div class="section active" id="sec-0">
     <div class="sec-header">
       <span class="sec-num-badge">01</span>
-      <span class="sec-title">Fiado</span>
+      <span class="sec-title">Usuários, permissões e auditoria</span>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Quantos clientes fiado ativos (mais ou menos)?</label>
+      <label class="q-label">Quem vai usar o sistema no começo?</label>
+      <textarea class="text-input" id="usuarios_iniciais" placeholder="Nome + função. Ex: Leandro dono, Rafa gerente, Carlim balcão..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem pode fechar caixa quando Leandro não estiver?</label>
+      <input class="text-input" type="text" id="quem_fecha_caixa" placeholder="Nome da pessoa de confiança ou 'só Leandro'">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem pode fazer sangria?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quem_sangria" id="sg1" value="so_dono"><label class="opt-pill" for="sg1">Só Leandro</label>
+        <input class="opt-input" type="radio" name="quem_sangria" id="sg2" value="gerente"><label class="opt-pill" for="sg2">Gerente/responsável</label>
+        <input class="opt-input" type="radio" name="quem_sangria" id="sg3" value="balcao_autorizado"><label class="opt-pill" for="sg3">Algum balconista autorizado</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem pode corrigir lançamento errado?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quem_corrige" id="qcorr1" value="so_dono"><label class="opt-pill" for="qcorr1">Só Leandro</label>
+        <input class="opt-input" type="radio" name="quem_corrige" id="qcorr2" value="gerente"><label class="opt-pill" for="qcorr2">Gerente</label>
+        <input class="opt-input" type="radio" name="quem_corrige" id="qcorr3" value="com_motivo"><label class="opt-pill" for="qcorr3">Usuário autorizado com motivo</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem pode cancelar venda?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quem_cancela_venda" id="cv1" value="so_dono"><label class="opt-pill" for="cv1">Só Leandro</label>
+        <input class="opt-input" type="radio" name="quem_cancela_venda" id="cv2" value="gerente"><label class="opt-pill" for="cv2">Gerente/responsável</label>
+        <input class="opt-input" type="radio" name="quem_cancela_venda" id="cv3" value="ninguem_balcao"><label class="opt-pill" for="cv3">Balconista não cancela</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem pode apagar ou perdoar dívida?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quem_perdoa" id="pd1" value="so_dono"><label class="opt-pill" for="pd1">Só Leandro</label>
+        <input class="opt-input" type="radio" name="quem_perdoa" id="pd2" value="dono_com_motivo"><label class="opt-pill" for="pd2">Só Leandro + motivo</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Confirma: cada pessoa terá sua própria senha?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="senha_individual" id="si1" value="sim"><label class="opt-pill" for="si1">Sim, senha individual</label>
+        <input class="opt-input" type="radio" name="senha_individual" id="si2" value="piloto_1_usuario"><label class="opt-pill" for="si2">No piloto, 1 usuário</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 CLIENTES -->
+  <div class="section" id="sec-1">
+    <div class="sec-header">
+      <span class="sec-num-badge">02</span>
+      <span class="sec-title">Clientes e cadastro</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quantos clientes fiado ativos existem mais ou menos?</label>
       <div class="opt-group">
         <input class="opt-input" type="radio" name="qtd_clientes" id="qc1" value="menos50"><label class="opt-pill" for="qc1">Menos de 50</label>
         <input class="opt-input" type="radio" name="qtd_clientes" id="qc2" value="50-100"><label class="opt-pill" for="qc2">50 – 100</label>
@@ -518,209 +581,376 @@
     </div>
 
     <div class="q-block">
-      <label class="q-label">Quem anota o fiado hoje?</label>
+      <label class="q-label">Dados mínimos para cadastrar cliente</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="quem_anota" id="qa1" value="os6"><label class="opt-pill" for="qa1">Os 6</label>
-        <input class="opt-input" type="radio" name="quem_anota" id="qa2" value="so1"><label class="opt-pill" for="qa2">Só 1 responsável</label>
-        <input class="opt-input" type="radio" name="quem_anota" id="qa3" value="alguns"><label class="opt-pill" for="qa3">Alguns</label>
-        <input class="opt-input" type="radio" name="quem_anota" id="qa4" value="dono"><label class="opt-pill" for="qa4">O próprio dono</label>
+        <input class="opt-input" type="checkbox" name="dados_cliente" id="dc1" value="apelido"><label class="opt-pill" for="dc1">Apelido</label>
+        <input class="opt-input" type="checkbox" name="dados_cliente" id="dc2" value="nome"><label class="opt-pill" for="dc2">Nome completo</label>
+        <input class="opt-input" type="checkbox" name="dados_cliente" id="dc3" value="telefone"><label class="opt-pill" for="dc3">Telefone</label>
+        <input class="opt-input" type="checkbox" name="dados_cliente" id="dc4" value="referencia"><label class="opt-pill" for="dc4">Referência</label>
+        <input class="opt-input" type="checkbox" name="dados_cliente" id="dc5" value="autorizados"><label class="opt-pill" for="dc5">Autorizados</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">O que anota no fiado?</label>
+      <label class="q-label">Cliente pode comprar na conta de outra pessoa?</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="o_que_anota" id="oa1" value="so_valor"><label class="opt-pill" for="oa1">Só o valor (R$)</label>
-        <input class="opt-input" type="radio" name="o_que_anota" id="oa2" value="itens"><label class="opt-pill" for="oa2">Itens também</label>
-        <input class="opt-input" type="radio" name="o_que_anota" id="oa3" value="depende"><label class="opt-pill" for="oa3">Depende</label>
+        <input class="opt-input" type="radio" name="familiar_fiado" id="ff1" value="sim"><label class="opt-pill" for="ff1">Sim</label>
+        <input class="opt-input" type="radio" name="familiar_fiado" id="ff2" value="so_autorizado"><label class="opt-pill" for="ff2">Só autorizado</label>
+        <input class="opt-input" type="radio" name="familiar_fiado" id="ff3" value="nao"><label class="opt-pill" for="ff3">Não</label>
+      </div>
+      <input class="text-input mt8" type="text" id="autorizados_fiado" placeholder="Quem costuma comprar no nome de quem?">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Como identificar cliente com apelido repetido?</label>
+      <textarea class="text-input" id="identifica_cliente" placeholder="Ex: telefone, referência, nome da mãe, rua, 'do posto'..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Importar clientes antigos do caderno entra no piloto?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="importar_clientes" id="ic1" value="sim_todos"><label class="opt-pill" for="ic1">Sim, todos</label>
+        <input class="opt-input" type="radio" name="importar_clientes" id="ic2" value="so_frequentes"><label class="opt-pill" for="ic2">Só frequentes</label>
+        <input class="opt-input" type="radio" name="importar_clientes" id="ic3" value="nao_agora"><label class="opt-pill" for="ic3">Não agora</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 VENDA -->
+  <div class="section" id="sec-2">
+    <div class="sec-header">
+      <span class="sec-num-badge">03</span>
+      <span class="sec-title">Venda rápida / balcão</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Como é uma venda normal do começo ao fim?</label>
+      <textarea class="text-input" id="fluxo_venda" placeholder="Quem atende, pesa, fala preço, recebe e entrega?"></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Na venda, precisa identificar cliente quando NÃO é fiado?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="cliente_venda" id="clv1" value="so_fiado"><label class="opt-pill" for="clv1">Só no fiado</label>
+        <input class="opt-input" type="radio" name="cliente_venda" id="clv2" value="opcional"><label class="opt-pill" for="clv2">Opcional</label>
+        <input class="opt-input" type="radio" name="cliente_venda" id="clv3" value="sempre"><label class="opt-pill" for="clv3">Sempre</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Como o cliente costuma pagar? (pode marcar mais de 1)</label>
+      <label class="q-label">Como a balança entra na venda?</label>
       <div class="opt-group">
-        <input class="opt-input" type="checkbox" name="como_paga" id="cp1" value="dia_certo"><label class="opt-pill" for="cp1">Dia certo</label>
-        <input class="opt-input" type="checkbox" name="como_paga" id="cp2" value="tudo_vez"><label class="opt-pill" for="cp2">Tudo de uma vez</label>
-        <input class="opt-input" type="checkbox" name="como_paga" id="cp3" value="abate_parcial"><label class="opt-pill" for="cp3">Abate parcial</label>
-        <input class="opt-input" type="checkbox" name="como_paga" id="cp4" value="quando_pode"><label class="opt-pill" for="cp4">Quando pode</label>
+        <input class="opt-input" type="radio" name="balanca_venda" id="bv1" value="so_peso"><label class="opt-pill" for="bv1">Só mostra peso</label>
+        <input class="opt-input" type="radio" name="balanca_venda" id="bv2" value="peso_preco"><label class="opt-pill" for="bv2">Peso + preço</label>
+        <input class="opt-input" type="radio" name="balanca_venda" id="bv3" value="etiqueta"><label class="opt-pill" for="bv3">Imprime etiqueta</label>
+        <input class="opt-input" type="radio" name="balanca_venda" id="bv4" value="valor_final"><label class="opt-pill" for="bv4">Passa valor final</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Quanto perde de fiado que não volta por mês?</label>
-      <input class="text-input" type="text" id="perda_fiado" placeholder="Ex: uns R$ 500, quase nada, não sei...">
+      <label class="q-label">Venda por produto ou valor direto?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="tipo_venda" id="tv1" value="valor_direto"><label class="opt-pill" for="tv1">Valor direto</label>
+        <input class="opt-input" type="radio" name="tipo_venda" id="tv2" value="produto_peso"><label class="opt-pill" for="tv2">Produto + peso</label>
+        <input class="opt-input" type="radio" name="tipo_venda" id="tv3" value="misto"><label class="opt-pill" for="tv3">Misto</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Pagamento misto acontece muito?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="pagamento_misto_freq" id="pmf1" value="muito"><label class="opt-pill" for="pmf1">Muito</label>
+        <input class="opt-input" type="radio" name="pagamento_misto_freq" id="pmf2" value="as_vezes"><label class="opt-pill" for="pmf2">Às vezes</label>
+        <input class="opt-input" type="radio" name="pagamento_misto_freq" id="pmf3" value="raro"><label class="opt-pill" for="pmf3">Raro</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Atalhos no teclado fazem sentido no balcão?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="checkbox" name="atalhos" id="at1" value="f1_venda"><label class="opt-pill" for="at1">F1 venda</label>
+        <input class="opt-input" type="checkbox" name="atalhos" id="at2" value="f2_cliente"><label class="opt-pill" for="at2">F2 cliente</label>
+        <input class="opt-input" type="checkbox" name="atalhos" id="at3" value="f3_valor"><label class="opt-pill" for="at3">F3 valor</label>
+        <input class="opt-input" type="checkbox" name="atalhos" id="at4" value="f4_finaliza"><label class="opt-pill" for="at4">F4 finalizar</label>
+        <input class="opt-input" type="checkbox" name="atalhos" id="at5" value="f6_fiado"><label class="opt-pill" for="at5">F6 fiado</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 FIADO -->
+  <div class="section" id="sec-3">
+    <div class="sec-header">
+      <span class="sec-num-badge">04</span>
+      <span class="sec-title">Fiado e cobrança</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem lança fiado hoje?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quem_lanca_fiado" id="qlf1" value="todos"><label class="opt-pill" for="qlf1">Todos</label>
+        <input class="opt-input" type="radio" name="quem_lanca_fiado" id="qlf2" value="alguns"><label class="opt-pill" for="qlf2">Alguns</label>
+        <input class="opt-input" type="radio" name="quem_lanca_fiado" id="qlf3" value="dono"><label class="opt-pill" for="qlf3">Leandro</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Como o cliente costuma pagar fiado? (pode marcar mais de 1)</label>
+      <div class="opt-group">
+        <input class="opt-input" type="checkbox" name="como_paga" id="pg1" value="dia_certo"><label class="opt-pill" for="pg1">Dia certo</label>
+        <input class="opt-input" type="checkbox" name="como_paga" id="pg2" value="tudo_vez"><label class="opt-pill" for="pg2">Tudo de uma vez</label>
+        <input class="opt-input" type="checkbox" name="como_paga" id="pg3" value="parcial"><label class="opt-pill" for="pg3">Parcial</label>
+        <input class="opt-input" type="checkbox" name="como_paga" id="pg4" value="quando_pode"><label class="opt-pill" for="pg4">Quando pode</label>
+      </div>
     </div>
 
     <div class="q-block">
       <label class="q-label">Tem limite de fiado por cliente?</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="limite_fiado" id="lf1" value="sim"><label class="opt-pill" for="lf1">Sim, tem limite</label>
+        <input class="opt-input" type="radio" name="limite_fiado" id="lf1" value="sim"><label class="opt-pill" for="lf1">Sim</label>
         <input class="opt-input" type="radio" name="limite_fiado" id="lf2" value="nao"><label class="opt-pill" for="lf2">Não</label>
         <input class="opt-input" type="radio" name="limite_fiado" id="lf3" value="feeling"><label class="opt-pill" for="lf3">No feeling</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Familiar pode comprar na conta do cliente?</label>
+      <label class="q-label">Como cobra hoje?</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="familiar_fiado" id="ff1" value="sim"><label class="opt-pill" for="ff1">Sim</label>
-        <input class="opt-input" type="radio" name="familiar_fiado" id="ff2" value="nao"><label class="opt-pill" for="ff2">Não</label>
-        <input class="opt-input" type="radio" name="familiar_fiado" id="ff3" value="as_vezes"><label class="opt-pill" for="ff3">Às vezes</label>
+        <input class="opt-input" type="checkbox" name="como_cobra" id="cc1" value="whatsapp"><label class="opt-pill" for="cc1">WhatsApp</label>
+        <input class="opt-input" type="checkbox" name="como_cobra" id="cc2" value="ligacao"><label class="opt-pill" for="cc2">Ligação</label>
+        <input class="opt-input" type="checkbox" name="como_cobra" id="cc3" value="pessoalmente"><label class="opt-pill" for="cc3">Pessoalmente</label>
+        <input class="opt-input" type="checkbox" name="como_cobra" id="cc4" value="nao_cobra"><label class="opt-pill" for="cc4">Quase não cobra</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Quem pode apagar ou perdoar uma dívida?</label>
-      <input class="text-input" type="text" id="quem_perdoa" placeholder="Ex: só eu, qualquer vendedor...">
+      <label class="q-label">Quanto de fiado costuma atrasar ou sumir por mês?</label>
+      <input class="text-input" type="text" id="perda_fiado" placeholder="Chute honesto: R$ por mês, quantidade de clientes ou 'não sei'">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Baixa parcial precisa ser comum na primeira versão?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="baixa_parcial" id="bp1" value="sim"><label class="opt-pill" for="bp1">Sim</label>
+        <input class="opt-input" type="radio" name="baixa_parcial" id="bp2" value="depois"><label class="opt-pill" for="bp2">Pode ficar para depois</label>
+      </div>
     </div>
   </div>
 
-  <!-- 02 CAIXA -->
-  <div class="section" id="sec-1">
+  <!-- 05 CAIXA -->
+  <div class="section" id="sec-4">
     <div class="sec-header">
-      <span class="sec-num-badge">02</span>
-      <span class="sec-title">Caixa e recebimento</span>
+      <span class="sec-num-badge">05</span>
+      <span class="sec-title">Caixa, recebimento e sangria</span>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Como você confere se o dinheiro do dia bateu?</label>
-      <textarea class="text-input" id="confere_dia" placeholder="Descreve como funciona hoje..."></textarea>
+      <label class="q-label">Como confere se o dinheiro do dia bateu?</label>
+      <textarea class="text-input" id="confere_dia" placeholder="Descrever fechamento atual, mesmo que seja na cabeça..."></textarea>
     </div>
 
     <div class="q-block">
-      <label class="q-label">O PIX cai em qual conta?</label>
+      <label class="q-label">Caixa é por vendedor, por balcão ou tudo misturado?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="tipo_caixa" id="tc1" value="vendedor"><label class="opt-pill" for="tc1">Por vendedor</label>
+        <input class="opt-input" type="radio" name="tipo_caixa" id="tc2" value="balcao"><label class="opt-pill" for="tc2">Por balcão</label>
+        <input class="opt-input" type="radio" name="tipo_caixa" id="tc3" value="misturado"><label class="opt-pill" for="tc3">Misturado</label>
+        <input class="opt-input" type="radio" name="tipo_caixa" id="tc4" value="nao_tem"><label class="opt-pill" for="tc4">Não tem controle</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">PIX cai em qual conta?</label>
       <div class="opt-group">
         <input class="opt-input" type="radio" name="pix_conta" id="px1" value="pessoal"><label class="opt-pill" for="px1">Pessoal</label>
         <input class="opt-input" type="radio" name="pix_conta" id="px2" value="loja"><label class="opt-pill" for="px2">Da loja</label>
-        <input class="opt-input" type="radio" name="pix_conta" id="px3" value="misto"><label class="opt-pill" for="px3">Misto / depende</label>
-        <input class="opt-input" type="radio" name="pix_conta" id="px4" value="vendedor"><label class="opt-pill" for="px4">Cada vendedor tem o seu</label>
+        <input class="opt-input" type="radio" name="pix_conta" id="px3" value="misto"><label class="opt-pill" for="px3">Misto</label>
+        <input class="opt-input" type="radio" name="pix_conta" id="px4" value="vendedor"><label class="opt-pill" for="px4">Conta de vendedor</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Compra mista (parte PIX + parte fiado) — como anota hoje?</label>
-      <textarea class="text-input" id="compra_mista" placeholder="Ex: anota só o fiado, faz dois lançamentos..."></textarea>
+      <label class="q-label">Quando faz sangria?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quando_sangria" id="qs1" value="valor"><label class="opt-pill" for="qs1">Quando acumula valor</label>
+        <input class="opt-input" type="radio" name="quando_sangria" id="qs2" value="horario"><label class="opt-pill" for="qs2">Por horário</label>
+        <input class="opt-input" type="radio" name="quando_sangria" id="qs3" value="fim_dia"><label class="opt-pill" for="qs3">Só no fim do dia</label>
+        <input class="opt-input" type="radio" name="quando_sangria" id="qs4" value="nao_faz"><label class="opt-pill" for="qs4">Não faz</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Fechamento será diário ou por turno?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="tipo_fechamento" id="tf1" value="diario"><label class="opt-pill" for="tf1">Diário</label>
+        <input class="opt-input" type="radio" name="tipo_fechamento" id="tf2" value="turno"><label class="opt-pill" for="tf2">Por turno</label>
+        <input class="opt-input" type="radio" name="tipo_fechamento" id="tf3" value="ambos"><label class="opt-pill" for="tf3">Ambos</label>
+      </div>
     </div>
   </div>
 
-  <!-- 03 EQUIPE -->
-  <div class="section" id="sec-2">
+  <!-- 06 COMPRAS -->
+  <div class="section" id="sec-5">
     <div class="sec-header">
-      <span class="sec-num-badge">03</span>
-      <span class="sec-title">Equipe</span>
+      <span class="sec-num-badge">06</span>
+      <span class="sec-title">Compras, fornecedores e contas a pagar</span>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Os 6 ganham como?</label>
+      <label class="q-label">Quais são os fornecedores principais?</label>
+      <textarea class="text-input" id="fornecedores_principais" placeholder="Nome, produto que fornece, frequência e forma de pagamento..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Compra à vista, a prazo ou misto?</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="remuneracao" id="r1" value="fixo"><label class="opt-pill" for="r1">Fixo</label>
-        <input class="opt-input" type="radio" name="remuneracao" id="r2" value="comissao"><label class="opt-pill" for="r2">Comissão</label>
-        <input class="opt-input" type="radio" name="remuneracao" id="r3" value="misto"><label class="opt-pill" for="r3">Fixo + comissão</label>
-        <input class="opt-input" type="radio" name="remuneracao" id="r4" value="varia"><label class="opt-pill" for="r4">Varia por cada um</label>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <label class="q-label">Funcionário consome produto da loja?</label>
-      <div class="opt-group">
-        <input class="opt-input" type="radio" name="consumo_func" id="cf1" value="sim_anota"><label class="opt-pill" for="cf1">Sim, anota</label>
-        <input class="opt-input" type="radio" name="consumo_func" id="cf2" value="sim_sem_anotar"><label class="opt-pill" for="cf2">Sim, sem anotar</label>
-        <input class="opt-input" type="radio" name="consumo_func" id="cf3" value="nao"><label class="opt-pill" for="cf3">Não acontece</label>
-        <input class="opt-input" type="radio" name="consumo_func" id="cf4" value="as_vezes"><label class="opt-pill" for="cf4">Às vezes</label>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <label class="q-label">Quando você não está, quem toma conta?</label>
-      <input class="text-input" type="text" id="responsavel_ausencia" placeholder="Nome ou cargo...">
-    </div>
-  </div>
-
-  <!-- 04 COMPRAS -->
-  <div class="section" id="sec-3">
-    <div class="sec-header">
-      <span class="sec-num-badge">04</span>
-      <span class="sec-title">Compras e fornecedor</span>
-    </div>
-
-    <div class="q-block">
-      <label class="q-label">Compra do frigorífico — à vista ou a prazo?</label>
-      <div class="opt-group">
-        <input class="opt-input" type="radio" name="compra_prazo" id="cp_1" value="avista"><label class="opt-pill" for="cp_1">Sempre à vista</label>
+        <input class="opt-input" type="radio" name="compra_prazo" id="cp_1" value="avista"><label class="opt-pill" for="cp_1">À vista</label>
         <input class="opt-input" type="radio" name="compra_prazo" id="cp_2" value="prazo"><label class="opt-pill" for="cp_2">A prazo</label>
         <input class="opt-input" type="radio" name="compra_prazo" id="cp_3" value="misto"><label class="opt-pill" for="cp_3">Misto</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Você sabe o custo por kg e o rendimento do boi?</label>
+      <label class="q-label">Tipos de compra que entram no controle</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="sabe_custo" id="sc1" value="sei_exato"><label class="opt-pill" for="sc1">Sei com precisão</label>
-        <input class="opt-input" type="radio" name="sabe_custo" id="sc2" value="estimo"><label class="opt-pill" for="sc2">Estimo</label>
-        <input class="opt-input" type="radio" name="sabe_custo" id="sc3" value="naosabe"><label class="opt-pill" for="sc3">Não sei</label>
+        <input class="opt-input" type="checkbox" name="tipos_compra" id="tcpr1" value="boi_inteiro"><label class="opt-pill" for="tcpr1">Boi inteiro</label>
+        <input class="opt-input" type="checkbox" name="tipos_compra" id="tcpr2" value="bovino_kg"><label class="opt-pill" for="tcpr2">Bovino por kg</label>
+        <input class="opt-input" type="checkbox" name="tipos_compra" id="tcpr3" value="suino"><label class="opt-pill" for="tcpr3">Suíno</label>
+        <input class="opt-input" type="checkbox" name="tipos_compra" id="tcpr4" value="embalagem"><label class="opt-pill" for="tcpr4">Embalagem</label>
+        <input class="opt-input" type="checkbox" name="tipos_compra" id="tcpr5" value="tempero"><label class="opt-pill" for="tcpr5">Tempero</label>
       </div>
-      <input class="text-input mt8" type="text" id="detalhe_custo" placeholder="Custo/kg e rendimento se souber...">
     </div>
 
     <div class="q-block">
-      <label class="q-label">Quanto vira linguiça / charque por semana?</label>
-      <input class="text-input" type="text" id="producao_semanal" placeholder="Ex: uns 50 kg de linguiça, 20 de charque...">
+      <label class="q-label">Quer alerta de conta vencendo?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="alerta_vencimento" id="av1" value="sim"><label class="opt-pill" for="av1">Sim</label>
+        <input class="opt-input" type="radio" name="alerta_vencimento" id="av2" value="nao"><label class="opt-pill" for="av2">Não agora</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Existe dívida antiga com fornecedor?</label>
+      <textarea class="text-input" id="divida_fornecedor" placeholder="Fornecedor, valor aproximado, vencimento, combinado..."></textarea>
     </div>
   </div>
 
-  <!-- 05 NEGÓCIO -->
-  <div class="section" id="sec-4">
+  <!-- 07 PRODUÇÃO -->
+  <div class="section" id="sec-6">
     <div class="sec-header">
-      <span class="sec-num-badge">05</span>
-      <span class="sec-title">Negócio geral</span>
+      <span class="sec-num-badge">07</span>
+      <span class="sec-title">Estoque, produção e perdas</span>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Se resolvesse só UMA coisa com o sistema, qual seria?</label>
-      <textarea class="text-input" id="prioridade_1" placeholder="A resposta dele, nas palavras dele..."></textarea>
-    </div>
-
-    <div class="q-block">
-      <label class="q-label">Faturamento por mês (mais ou menos)</label>
+      <label class="q-label">Estoque deve começar por dinheiro, kg ou os dois?</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="faturamento" id="fat1" value="50-100k"><label class="opt-pill" for="fat1">R$ 50–100k</label>
-        <input class="opt-input" type="radio" name="faturamento" id="fat2" value="100-150k"><label class="opt-pill" for="fat2">R$ 100–150k</label>
-        <input class="opt-input" type="radio" name="faturamento" id="fat3" value="150-200k"><label class="opt-pill" for="fat3">R$ 150–200k</label>
-        <input class="opt-input" type="radio" name="faturamento" id="fat4" value="200kplus"><label class="opt-pill" for="fat4">R$ 200k+</label>
-        <input class="opt-input" type="radio" name="faturamento" id="fat5" value="naosabe"><label class="opt-pill" for="fat5">Não falou</label>
+        <input class="opt-input" type="radio" name="tipo_estoque" id="te1" value="dinheiro"><label class="opt-pill" for="te1">Por dinheiro</label>
+        <input class="opt-input" type="radio" name="tipo_estoque" id="te2" value="kg"><label class="opt-pill" for="te2">Por kg</label>
+        <input class="opt-input" type="radio" name="tipo_estoque" id="te3" value="ambos"><label class="opt-pill" for="te3">Os dois</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Você sabe a margem de verdade?</label>
+      <label class="q-label">No boi inteiro, sabe peso comprado e valor total?</label>
       <div class="opt-group">
-        <input class="opt-input" type="radio" name="sabe_margem" id="sm1" value="sabe"><label class="opt-pill" for="sm1">Sei com precisão</label>
-        <input class="opt-input" type="radio" name="sabe_margem" id="sm2" value="estimo"><label class="opt-pill" for="sm2">Estimo / chuto</label>
-        <input class="opt-input" type="radio" name="sabe_margem" id="sm3" value="naosabe"><label class="opt-pill" for="sm3">Não sei</label>
+        <input class="opt-input" type="radio" name="sabe_custo" id="sc1" value="sim"><label class="opt-pill" for="sc1">Sim</label>
+        <input class="opt-input" type="radio" name="sabe_custo" id="sc2" value="aproximado"><label class="opt-pill" for="sc2">Aproximado</label>
+        <input class="opt-input" type="radio" name="sabe_custo" id="sc3" value="nao"><label class="opt-pill" for="sc3">Não</label>
+      </div>
+      <input class="text-input mt8" type="text" id="detalhe_custo" placeholder="Ex: kg comprado, valor total, rendimento que ele acredita...">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quanto produz de linguiça e charque por semana?</label>
+      <input class="text-input" type="text" id="producao_semanal" placeholder="Ex: 50 kg de linguiça, 20 kg de charque...">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">O que costuma gerar perda?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="checkbox" name="motivo_perda" id="mp1" value="validade"><label class="opt-pill" for="mp1">Validade</label>
+        <input class="opt-input" type="checkbox" name="motivo_perda" id="mp2" value="estragada"><label class="opt-pill" for="mp2">Carne estragada</label>
+        <input class="opt-input" type="checkbox" name="motivo_perda" id="mp3" value="erro_corte"><label class="opt-pill" for="mp3">Erro de corte</label>
+        <input class="opt-input" type="checkbox" name="motivo_perda" id="mp4" value="sobra"><label class="opt-pill" for="mp4">Sobra</label>
+        <input class="opt-input" type="checkbox" name="motivo_perda" id="mp5" value="reclamacao"><label class="opt-pill" for="mp5">Reclamação</label>
       </div>
     </div>
 
     <div class="q-block">
-      <label class="q-label">Quais são as "outras" despesas? Tem outro negócio junto?</label>
-      <textarea class="text-input" id="outras_despesas" placeholder="Anotar o que ele disser..."></textarea>
+      <label class="q-label">Dono ou funcionário retira carne para consumo?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="retirada_interna" id="ri1" value="sim_anota"><label class="opt-pill" for="ri1">Sim, anota</label>
+        <input class="opt-input" type="radio" name="retirada_interna" id="ri2" value="sim_nao_anota"><label class="opt-pill" for="ri2">Sim, não anota</label>
+        <input class="opt-input" type="radio" name="retirada_interna" id="ri3" value="nao"><label class="opt-pill" for="ri3">Não</label>
+      </div>
     </div>
   </div>
 
-  <!-- 06 HARDWARE -->
-  <div class="section" id="sec-5">
+  <!-- 08 DESPESAS -->
+  <div class="section" id="sec-7">
     <div class="sec-header">
-      <span class="sec-num-badge">06</span>
-      <span class="sec-title">Hardware</span>
+      <span class="sec-num-badge">08</span>
+      <span class="sec-title">Despesas, DRE e resultado</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quais despesas fixas existem todo mês?</label>
+      <textarea class="text-input" id="despesas_fixas" placeholder="Aluguel, energia, salários, contador, internet, água..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quais despesas variáveis aparecem no mês?</label>
+      <textarea class="text-input" id="despesas_variaveis" placeholder="Frete, manutenção, embalagem extra, taxa cartão, gás, tempero..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Existe despesa pessoal ou outro negócio misturado?</label>
+      <textarea class="text-input" id="despesa_misturada" placeholder="Anotar com cuidado, sem julgar: o que mistura com a loja?"></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Para ele, faturamento é o quê?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="conceito_faturamento" id="cfat1" value="vendido"><label class="opt-pill" for="cfat1">Valor vendido</label>
+        <input class="opt-input" type="radio" name="conceito_faturamento" id="cfat2" value="recebido"><label class="opt-pill" for="cfat2">Dinheiro recebido</label>
+        <input class="opt-input" type="radio" name="conceito_faturamento" id="cfat3" value="nao_sabe"><label class="opt-pill" for="cfat3">Não separa hoje</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Relatório inicial: simples ou DRE completa?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="tipo_relatorio" id="tr1" value="simples"><label class="opt-pill" for="tr1">Simples primeiro</label>
+        <input class="opt-input" type="radio" name="tipo_relatorio" id="tr2" value="dre"><label class="opt-pill" for="tr2">DRE completa</label>
+        <input class="opt-input" type="radio" name="tipo_relatorio" id="tr3" value="depois"><label class="opt-pill" for="tr3">DRE depois</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 PILOTO -->
+  <div class="section" id="sec-8">
+    <div class="sec-header">
+      <span class="sec-num-badge">09</span>
+      <span class="sec-title">Hardware, observação e piloto</span>
     </div>
 
     <div class="q-block">
       <label class="q-label">O que já tem hoje? (pode marcar mais de 1)</label>
       <div class="opt-group">
-        <input class="opt-input" type="checkbox" name="hardware" id="hw1" value="pc"><label class="opt-pill" for="hw1">PC / Desktop</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw1" value="pc"><label class="opt-pill" for="hw1">PC</label>
         <input class="opt-input" type="checkbox" name="hardware" id="hw2" value="notebook"><label class="opt-pill" for="hw2">Notebook</label>
         <input class="opt-input" type="checkbox" name="hardware" id="hw3" value="tablet"><label class="opt-pill" for="hw3">Tablet</label>
-        <input class="opt-input" type="checkbox" name="hardware" id="hw4" value="impressora"><label class="opt-pill" for="hw4">Impressora</label>
-        <input class="opt-input" type="checkbox" name="hardware" id="hw5" value="nenhum"><label class="opt-pill" for="hw5">Nenhum</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw4" value="celular"><label class="opt-pill" for="hw4">Celular</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw5" value="impressora"><label class="opt-pill" for="hw5">Impressora</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quantos pontos de venda no começo?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="pontos_venda" id="pv1" value="1"><label class="opt-pill" for="pv1">1 ponto</label>
+        <input class="opt-input" type="radio" name="pontos_venda" id="pv2" value="2"><label class="opt-pill" for="pv2">2 pontos</label>
+        <input class="opt-input" type="radio" name="pontos_venda" id="pv3" value="3mais"><label class="opt-pill" for="pv3">3+</label>
       </div>
     </div>
 
@@ -731,15 +961,21 @@
         <input class="opt-input" type="radio" name="balanca_etiqueta" id="be2" value="nao"><label class="opt-pill" for="be2">Não</label>
         <input class="opt-input" type="radio" name="balanca_etiqueta" id="be3" value="naosei"><label class="opt-pill" for="be3">Não sei</label>
       </div>
-      <input class="text-input mt8" type="text" id="balanca_marca" placeholder="Marca / modelo (se der pra ver)...">
+      <input class="text-input mt8" type="text" id="balanca_marca" placeholder="Marca / modelo da balança">
     </div>
-  </div>
 
-  <!-- 07 OBSERVAÇÕES -->
-  <div class="section" id="sec-6">
-    <div class="sec-header">
-      <span class="sec-num-badge">07</span>
-      <span class="sec-title">Observações no local</span>
+    <div class="q-block">
+      <label class="q-label">Quem será o primeiro usuário do piloto?</label>
+      <input class="text-input" type="text" id="primeiro_usuario" placeholder="Nome da pessoa mais apta para testar">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Primeira versão começa por qual módulo?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="primeiro_modulo" id="pm1" value="venda"><label class="opt-pill" for="pm1">Venda rápida</label>
+        <input class="opt-input" type="radio" name="primeiro_modulo" id="pm2" value="fiado"><label class="opt-pill" for="pm2">Fiado</label>
+        <input class="opt-input" type="radio" name="primeiro_modulo" id="pm3" value="caixa"><label class="opt-pill" for="pm3">Caixa</label>
+      </div>
     </div>
 
     <div class="obs-item">
@@ -752,7 +988,7 @@
     </div>
     <div class="obs-item">
       <input class="obs-check-input" type="checkbox" id="obs3">
-      <label class="obs-check-label" for="obs3"><div class="obs-box">✓</div>Identifiquei quem pega tech vs quem trava</label>
+      <label class="obs-check-label" for="obs3"><div class="obs-box">✓</div>Identifiquei quem pega tecnologia mais rápido</label>
     </div>
     <div class="obs-item">
       <input class="obs-check-input" type="checkbox" id="obs4">
@@ -760,25 +996,30 @@
     </div>
     <div class="obs-item">
       <input class="obs-check-input" type="checkbox" id="obs5">
-      <label class="obs-check-label" for="obs5"><div class="obs-box">✓</div>Fotografei a balança (marca + modelo visível)</label>
+      <label class="obs-check-label" for="obs5"><div class="obs-box">✓</div>Fotografei a balança com marca/modelo</label>
     </div>
 
     <div class="q-block" style="margin-top:4px">
-      <label class="q-label">Notas da observação</label>
-      <textarea class="text-input" id="notas_obs" placeholder="Tempo de atendimento, ritmo, fila, ambiente..."></textarea>
+      <label class="q-label">Qual erro faria ele desistir do sistema?</label>
+      <textarea class="text-input" id="erro_desistencia" placeholder="Ex: ficar lento, travar venda, perder lançamento, complicar balcão..."></textarea>
     </div>
   </div>
 
-  <!-- 08 NOTAS + EXPORTAR -->
-  <div class="section" id="sec-7">
+  <!-- 10 NOTAS + EXPORTAR -->
+  <div class="section" id="sec-9">
     <div class="sec-header">
-      <span class="sec-num-badge">08</span>
-      <span class="sec-title">Notas livres</span>
+      <span class="sec-num-badge">10</span>
+      <span class="sec-title">Notas finais e fechamento</span>
     </div>
 
     <div class="q-block">
       <textarea class="text-input" id="notas_livres" style="min-height:160px"
         placeholder="Tudo que ficou de fora — frases dele, dores que apareceram de surpresa, insights, imprevistos..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Decisão final do MVP após a conversa</label>
+      <textarea class="text-input" id="decisao_mvp" placeholder="Ex: começar por venda rápida + cliente + fiado + usuário individual..."></textarea>
     </div>
 
     <div class="export-section">
@@ -799,7 +1040,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const TOTAL = 8;
+  const TOTAL = 10;
   let atual = 0;
 
   function ir(idx) {
@@ -892,10 +1133,11 @@
 
   // ── Progresso ──
   const CAMPOS_CHAVE = [
-    'qtd_clientes','quem_anota','o_que_anota','como_paga','perda_fiado',
-    'limite_fiado','familiar_fiado','quem_perdoa','confere_dia','pix_conta',
-    'compra_mista','remuneracao','consumo_func','responsavel_ausencia',
-    'compra_prazo','sabe_custo','prioridade_1','faturamento','sabe_margem','balanca_etiqueta'
+    'usuarios_iniciais','quem_fecha_caixa','senha_individual','qtd_clientes','dados_cliente',
+    'fluxo_venda','tipo_venda','pagamento_misto_freq','atalhos','quem_lanca_fiado',
+    'como_paga','limite_fiado','perda_fiado','confere_dia','tipo_caixa',
+    'pix_conta','compra_prazo','fornecedores_principais','tipo_estoque','producao_semanal',
+    'despesas_fixas','conceito_faturamento','hardware','balanca_etiqueta','primeiro_modulo','decisao_mvp'
   ];
 
   function progresso() {
@@ -917,18 +1159,26 @@
 
   // ── Export ──
   const NOMES = {
-    qtd_clientes:'Clientes fiado', quem_anota:'Quem anota', o_que_anota:'O que anota',
-    como_paga:'Como paga', perda_fiado:'Perda/mês', limite_fiado:'Limite por cliente',
-    familiar_fiado:'Familiar na conta', quem_perdoa:'Quem pode perdoar',
-    confere_dia:'Fechamento do dia', pix_conta:'PIX — conta', compra_mista:'Compra mista',
-    remuneracao:'Remuneração', consumo_func:'Consumo funcionário', responsavel_ausencia:'Responsável na ausência',
-    compra_prazo:'Fornecedor', sabe_custo:'Custo/rendimento', detalhe_custo:'Detalhe custo',
-    producao_semanal:'Produção semana', prioridade_1:'Prioridade #1', faturamento:'Faturamento',
-    sabe_margem:'Sabe margem', outras_despesas:'Outras despesas', hardware:'Hardware',
-    balanca_etiqueta:'Balança etiqueta', balanca_marca:'Balança marca',
-    notas_obs:'Obs. local', notas_livres:'Notas livres',
-    obs1:'✓ Cronometrou venda', obs2:'✓ Fotografou caderno',
-    obs3:'✓ Aptidão tech', obs4:'✓ Onde tem fila', obs5:'✓ Fotografou balança',
+    usuarios_iniciais:'Usuários iniciais', quem_fecha_caixa:'Quem fecha caixa', quem_sangria:'Quem faz sangria',
+    quem_corrige:'Quem corrige lançamento', quem_cancela_venda:'Quem cancela venda', quem_perdoa:'Quem perdoa dívida',
+    senha_individual:'Senha individual', qtd_clientes:'Clientes fiado ativos', dados_cliente:'Dados mínimos do cliente',
+    familiar_fiado:'Compra na conta de outro', autorizados_fiado:'Autorizados no fiado', identifica_cliente:'Identificação de cliente',
+    importar_clientes:'Importar clientes antigos', fluxo_venda:'Fluxo de venda', cliente_venda:'Cliente na venda',
+    balanca_venda:'Balança na venda', tipo_venda:'Tipo de venda', pagamento_misto_freq:'Frequência pagamento misto',
+    atalhos:'Atalhos desejados', quem_lanca_fiado:'Quem lança fiado', como_paga:'Como paga fiado',
+    limite_fiado:'Limite de fiado', como_cobra:'Como cobra', perda_fiado:'Fiado que atrasa/some',
+    baixa_parcial:'Baixa parcial', confere_dia:'Conferência do dia', tipo_caixa:'Tipo de caixa',
+    pix_conta:'PIX cai em qual conta', quando_sangria:'Quando faz sangria', tipo_fechamento:'Tipo de fechamento',
+    fornecedores_principais:'Fornecedores principais', compra_prazo:'Compra à vista/prazo', tipos_compra:'Tipos de compra',
+    alerta_vencimento:'Alerta de vencimento', divida_fornecedor:'Dívida com fornecedor', tipo_estoque:'Tipo de estoque',
+    sabe_custo:'Sabe peso/custo do boi', detalhe_custo:'Detalhe custo/rendimento', producao_semanal:'Produção semanal',
+    motivo_perda:'Motivos de perda', retirada_interna:'Retirada interna', despesas_fixas:'Despesas fixas',
+    despesas_variaveis:'Despesas variáveis', despesa_misturada:'Despesa misturada', conceito_faturamento:'Conceito de faturamento',
+    tipo_relatorio:'Tipo de relatório', hardware:'Hardware', pontos_venda:'Pontos de venda', balanca_etiqueta:'Balança etiqueta',
+    balanca_marca:'Marca/modelo balança', primeiro_usuario:'Primeiro usuário piloto', primeiro_modulo:'Primeiro módulo',
+    erro_desistencia:'Erro que faria desistir', decisao_mvp:'Decisão final do MVP', notas_livres:'Notas livres',
+    obs1:'✓ Cronometrou venda', obs2:'✓ Fotografou caderno', obs3:'✓ Aptidão tech',
+    obs4:'✓ Onde tem fila', obs5:'✓ Fotografou balança',
   };
 
   function exportar() {
