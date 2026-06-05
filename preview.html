@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Preview — Sistema Açougue Sertanejo</title>
+  <title>Balcão Forte — Preview Açougue Sertanejo</title>
   <style>
     :root {
       --charcoal: #17100b;
@@ -58,6 +58,205 @@
       min-height: 100dvh;
       display: grid;
       grid-template-columns: 260px minmax(0, 1fr);
+    }
+
+    .is-hidden {
+      display: none !important;
+    }
+
+    .login-screen {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: minmax(320px, .85fr) minmax(0, 1.15fr);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(216,139,34,.24), transparent 20rem),
+        linear-gradient(135deg, var(--charcoal), #2a1a12 54%, #6f1b12);
+      color: var(--cream);
+      overflow: hidden;
+    }
+
+    .login-brand {
+      padding: clamp(28px, 5vw, 62px);
+      display: grid;
+      align-content: space-between;
+      gap: 28px;
+      position: relative;
+      border-right: 5px solid var(--gold);
+    }
+
+    .login-brand::after {
+      content: "BALCÃO";
+      position: absolute;
+      left: clamp(22px, 4vw, 52px);
+      bottom: -18px;
+      color: rgba(255,248,234,.05);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(76px, 12vw, 180px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      pointer-events: none;
+    }
+
+    .system-mark {
+      display: grid;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .system-mark h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(52px, 8vw, 102px);
+      line-height: .86;
+      letter-spacing: -1px;
+    }
+
+    .system-mark p {
+      max-width: 430px;
+      color: rgba(255,248,234,.74);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .login-proof {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+      max-width: 460px;
+    }
+
+    .proof-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,248,234,.82);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .proof-row b {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--charcoal);
+      flex: 0 0 auto;
+    }
+
+    .login-panel-wrap {
+      display: grid;
+      place-items: center;
+      padding: clamp(20px, 4vw, 54px);
+      background:
+        linear-gradient(90deg, rgba(255,248,234,.08), transparent),
+        repeating-linear-gradient(0deg, rgba(255,248,234,.04) 0 1px, transparent 1px 34px);
+    }
+
+    .login-card {
+      width: min(100%, 470px);
+      background: var(--panel);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: 0 24px 70px rgba(0,0,0,.24);
+      overflow: hidden;
+    }
+
+    .login-card-head {
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(123,29,19,.08), transparent),
+        #fff8ea;
+    }
+
+    .login-card-head h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .login-card-head p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .login-form {
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .login-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .login-field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .login-field input {
+      min-height: 56px;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: #fffaf0;
+      padding: 0 14px;
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 900;
+      outline: none;
+    }
+
+    .login-field input:focus {
+      border-color: var(--oxblood);
+      box-shadow: 0 0 0 4px rgba(123,29,19,.09);
+    }
+
+    .role-preview {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .role-chip {
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      background: #fffaf0;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .role-chip.active {
+      background: var(--oxblood);
+      border-color: var(--oxblood);
+      color: var(--cream);
+    }
+
+    .login-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .login-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 800;
     }
 
     .sidebar {
@@ -1068,6 +1267,16 @@
     }
 
     @media (max-width: 980px) {
+      .login-screen {
+        grid-template-columns: 1fr;
+      }
+
+      .login-brand {
+        min-height: 320px;
+        border-right: 0;
+        border-bottom: 5px solid var(--gold);
+      }
+
       .shell {
         grid-template-columns: 1fr;
         padding-bottom: 72px;
@@ -1146,6 +1355,14 @@
         font-size: 28px;
       }
 
+      .system-mark h1 {
+        font-size: 54px;
+      }
+
+      .role-preview {
+        grid-template-columns: 1fr;
+      }
+
       .metrics, .cards, .toolbar {
         grid-template-columns: 1fr;
       }
@@ -1180,12 +1397,56 @@
   </style>
 </head>
 <body>
-  <div class="shell">
+  <section class="login-screen" id="loginScreen">
+    <div class="login-brand">
+      <div class="system-mark">
+        <div class="kicker">Sistema de balcão e gestão</div>
+        <h1>Balcão<br>Forte</h1>
+        <p>Venda rápida, fiado, caixa, compras e permissões em uma operação só. Cada usuário entra com seu acesso.</p>
+      </div>
+      <div class="login-proof">
+        <div class="proof-row"><b>1</b> Senha individual para cada pessoa</div>
+        <div class="proof-row"><b>2</b> Menu muda conforme permissão</div>
+        <div class="proof-row"><b>3</b> Ação sensível fica registrada</div>
+      </div>
+    </div>
+
+    <div class="login-panel-wrap">
+      <div class="login-card">
+        <div class="login-card-head">
+          <div class="kicker">Açougue Sertanejo</div>
+          <h2>Entrar no sistema</h2>
+          <p>Preview da visão do dono. No sistema real, cada usuário terá seu próprio login.</p>
+        </div>
+        <div class="login-form">
+          <div class="login-field">
+            <label>Usuário</label>
+            <input id="loginUser" value="Leandro" autocomplete="username">
+          </div>
+          <div class="login-field">
+            <label>Senha</label>
+            <input id="loginPass" type="password" value="123456" autocomplete="current-password">
+          </div>
+          <div class="role-preview">
+            <div class="role-chip active">Dono</div>
+            <div class="role-chip">Gerente</div>
+            <div class="role-chip">Balcão</div>
+          </div>
+          <div class="login-actions">
+            <button class="btn primary" id="loginBtn">Acessar painel do dono</button>
+            <div class="login-note">Demo visual: o login real será feito com autenticação segura, permissões no banco e registro de auditoria.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell is-hidden" id="appShell">
     <aside class="sidebar">
       <div class="brand">
-        <div class="kicker">Balcão em controle</div>
+        <div class="kicker">Balcão Forte</div>
         <h1>Açougue Sertanejo</h1>
-        <p>Do caderno para um painel de balcão: fiado, caixa, compras e produção no mesmo ritmo da loja.</p>
+        <p>Do caderno para um painel de balcão: venda, fiado, caixa, compras e produção no mesmo ritmo da loja.</p>
       </div>
 
       <nav class="nav" id="sideNav">
@@ -1658,7 +1919,7 @@
     </section>
   </div>
 
-  <nav class="mobile-nav" id="mobileNav">
+  <nav class="mobile-nav is-hidden" id="mobileNav">
     <button class="active" data-view="dashboard">Dono</button>
     <button data-view="config">Acesso</button>
     <button data-view="clientes">Clientes</button>
@@ -1691,6 +1952,18 @@
       document.getElementById('viewSubtitle').textContent = meta[id][2];
       document.querySelector('.main').scrollTop = 0;
     }
+
+    function entrarDemo() {
+      document.getElementById('loginScreen').classList.add('is-hidden');
+      document.getElementById('appShell').classList.remove('is-hidden');
+      document.getElementById('mobileNav').classList.remove('is-hidden');
+      setView('dashboard');
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', entrarDemo);
+    document.getElementById('loginPass').addEventListener('keydown', event => {
+      if (event.key === 'Enter') entrarDemo();
+    });
 
     document.querySelectorAll('[data-view]').forEach(btn => {
       btn.addEventListener('click', () => setView(btn.dataset.view));
