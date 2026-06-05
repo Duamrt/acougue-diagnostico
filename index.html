@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Diagnóstico — Açougue Sertanejo</title>
+  <style>
+    :root {
+      --bg:      #F6F1E8;
+      --ink:     #17130E;
+      --text:    #241E17;
+      --muted:   #70665B;
+      --surface: #FFFDF7;
+      --surf2:   #F2E7D8;
+      --line:    #D7C7B5;
+      --strong:  #7B1D13;
+      --strong2: #A92D1F;
+      --accent:  #D98A1B;
+      --accent2: #FFC04D;
+      --green:   #296B45;
+      --red:     #B83324;
+      --shadow:  0 18px 45px rgba(39, 25, 13, .12);
+      --r: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(217, 138, 27, .18), transparent 32rem),
+        linear-gradient(135deg, rgba(123, 29, 19, .06) 0 25%, transparent 25% 50%, rgba(123, 29, 19, .04) 50% 75%, transparent 75%),
+        var(--bg);
+      background-size: auto, 32px 32px, auto;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .app-header {
+      background: linear-gradient(135deg, #23160F, #5B160F 58%, #8F2418);
+      border-bottom: 4px solid var(--accent);
+      color: #FFF8EA;
+      padding: 18px clamp(18px, 4vw, 36px) 16px;
+      flex-shrink: 0;
+      box-shadow: 0 10px 30px rgba(35, 22, 15, .22);
+    }
+    .header-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: end;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .eyebrow {
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+    .app-title {
+      font-size: clamp(27px, 4vw, 46px);
+      font-weight: 900;
+      letter-spacing: 0;
+      color: #FFF8EA;
+      margin-top: 2px;
+      line-height: 1;
+    }
+    .app-sub {
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 13px;
+      color: rgba(255, 248, 234, .76);
+      margin-top: 8px;
+    }
+    .header-stamp {
+      display: grid;
+      place-items: center;
+      width: 104px;
+      aspect-ratio: 1;
+      border: 2px solid rgba(255, 192, 77, .55);
+      border-radius: 50%;
+      color: var(--accent2);
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transform: rotate(-7deg);
+      background: rgba(255, 248, 234, .06);
+    }
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 1180px;
+      margin: 18px auto 0;
+    }
+    .progress-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 248, 234, .18);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 0.5s ease;
+      border-radius: 99px;
+    }
+    .progress-pct {
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent2);
+      width: 42px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ── TAB NAV ── */
+    .tab-nav {
+      background: rgba(255, 253, 247, .94);
+      border-bottom: 1px solid var(--line);
+      padding: 12px clamp(14px, 3vw, 28px);
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(39, 25, 13, .06);
+    }
+    .tab-nav::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex-shrink: 0;
+      min-width: 112px;
+      height: 48px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #FFFDF7;
+      color: var(--muted);
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 12px rgba(39, 25, 13, .05);
+    }
+    .tab-btn.active {
+      background: var(--strong);
+      color: #FFF8EA;
+      border-color: var(--strong);
+      box-shadow: 0 10px 18px rgba(123, 29, 19, .18);
+    }
+    .tab-btn.done {
+      border-color: rgba(41, 107, 69, .45);
+      color: var(--green);
+    }
+    .tab-index { opacity: .72; }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: clamp(16px, 3vw, 28px);
+    }
+
+    /* ── SECTION ── */
+    .section { display: none; }
+    .section.active {
+      display: block;
+      max-width: 980px;
+      margin: 0 auto;
+      background: rgba(255, 253, 247, .92);
+      border: 1px solid rgba(215, 199, 181, .92);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0;
+      padding: 20px clamp(18px, 3vw, 26px);
+      background:
+        linear-gradient(90deg, rgba(123, 29, 19, .08), transparent),
+        #FFF8EA;
+      border-bottom: 1px solid var(--line);
+    }
+    .sec-num-badge {
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #FFF8EA;
+      background: var(--strong);
+      border: 1px solid var(--strong);
+      border-radius: 5px;
+      padding: 5px 9px;
+      flex-shrink: 0;
+    }
+    .sec-title {
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: clamp(17px, 2vw, 22px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+
+    /* ── PERGUNTA ── */
+    .q-block {
+      padding: 22px clamp(18px, 3vw, 26px);
+      border-bottom: 1px solid var(--line);
+    }
+    .q-block:last-child { border-bottom: none; }
+
+    .q-label {
+      display: block;
+      font-size: clamp(17px, 2.2vw, 22px);
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    /* ── PILLS ── */
+    .opt-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .opt-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .opt-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 17px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+      min-height: 50px;
+      font-weight: 700;
+      color: #3D342B;
+      background: #FFFDF7;
+      transition: all 0.12s;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 10px rgba(39, 25, 13, .05);
+    }
+    .opt-input:checked + .opt-pill {
+      border-color: var(--strong);
+      background: #7B1D13;
+      color: #FFF8EA;
+      font-weight: 700;
+      box-shadow: 0 10px 18px rgba(123, 29, 19, .2);
+    }
+
+    /* ── TEXT INPUT ── */
+    .text-input {
+      width: 100%;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 17px;
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      background: #FFFCF4;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+      min-height: 54px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    .text-input::placeholder { color: var(--muted); opacity: 0.72; }
+    .text-input:focus {
+      border-color: var(--strong);
+      box-shadow: 0 0 0 4px rgba(123, 29, 19, .09);
+    }
+    textarea.text-input { resize: vertical; min-height: 110px; }
+    .mt8 { margin-top: 8px; }
+
+    /* ── OBS CHECKBOXES ── */
+    .obs-item {
+      display: flex;
+      border-bottom: 1px solid var(--line);
+      padding: 0 clamp(18px, 3vw, 26px);
+      background: rgba(255, 253, 247, .72);
+    }
+    .obs-item:last-of-type { border-bottom: none; }
+    .obs-check-input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .obs-check-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 0;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 16px;
+      color: #4B4138;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.12s;
+    }
+    .obs-check-input:checked + .obs-check-label { color: var(--text); }
+    .obs-box {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.12s;
+      color: transparent;
+      background: #FFFDF7;
+    }
+    .obs-check-input:checked + .obs-check-label .obs-box {
+      border-color: var(--green);
+      background: rgba(41, 107, 69, .1);
+      color: var(--green);
+    }
+
+    /* ── NAV BUTTONS ── */
+    .nav-bar {
+      display: flex;
+      gap: 10px;
+      padding: 14px clamp(14px, 3vw, 28px);
+      background: rgba(255, 253, 247, .96);
+      border-top: 1px solid var(--line);
+      flex-shrink: 0;
+      box-shadow: 0 -10px 24px rgba(39, 25, 13, .08);
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 16px;
+      border-radius: var(--r);
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 52px;
+      border: 1px solid var(--line);
+      background: #FFFDF7;
+      color: var(--text);
+      transition: all 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-btn.next {
+      background: var(--strong);
+      color: #FFF8EA;
+      border-color: var(--strong);
+      flex: 2;
+    }
+    .nav-btn:active { opacity: 0.75; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+    /* ── EXPORT SECTION ── */
+    .export-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 8px clamp(18px, 3vw, 26px) 24px;
+    }
+    .btn {
+      width: 100%;
+      padding: 18px;
+      border-radius: var(--r);
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      cursor: pointer;
+      min-height: 54px;
+      border: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary { background: var(--strong); color: #FFF8EA; }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(248,113,113,.3); }
+    .btn:active { opacity: 0.7; }
+
+    .save-info {
+      text-align: center;
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--strong);
+      color: #FFF8EA;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+      font-weight: 700;
+      border-radius: 99px;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 900px) {
+      body {
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+      }
+      .main {
+        padding-top: 30px;
+        padding-bottom: 30px;
+      }
+      .opt-group { gap: 10px; }
+    }
+
+    @media (max-width: 640px) {
+      .header-top { grid-template-columns: 1fr; }
+      .header-stamp { display: none; }
+      .app-title { font-size: 30px; }
+      .tab-btn { min-width: 86px; }
+      .tab-name { display: none; }
+      .q-label { font-size: 17px; }
+      .opt-pill {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 136px;
+      }
+      .nav-bar {
+        position: sticky;
+        bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div>
+      <div class="eyebrow">Diagnóstico Empresarial</div>
+      <div class="app-title">Açougue Sertanejo</div>
+      <div class="app-sub">Leandro · Jupi-PE · Levantamento inicial ao vivo</div>
+    </div>
+    <div class="header-stamp">Mapa<br>do<br>negócio</div>
+  </div>
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-pct" id="progressLabel">0%</div>
+  </div>
+</div>
+
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" onclick="ir(0)"><span class="tab-index">01</span><span class="tab-name">Fiado</span></button>
+  <button class="tab-btn" onclick="ir(1)"><span class="tab-index">02</span><span class="tab-name">Caixa</span></button>
+  <button class="tab-btn" onclick="ir(2)"><span class="tab-index">03</span><span class="tab-name">Equipe</span></button>
+  <button class="tab-btn" onclick="ir(3)"><span class="tab-index">04</span><span class="tab-name">Compras</span></button>
+  <button class="tab-btn" onclick="ir(4)"><span class="tab-index">05</span><span class="tab-name">Negócio</span></button>
+  <button class="tab-btn" onclick="ir(5)"><span class="tab-index">06</span><span class="tab-name">Hardware</span></button>
+  <button class="tab-btn" onclick="ir(6)"><span class="tab-index">07</span><span class="tab-name">Local</span></button>
+  <button class="tab-btn" onclick="ir(7)"><span class="tab-index">08</span><span class="tab-name">Notas</span></button>
+</div>
+
+<div class="main">
+
+  <!-- 01 FIADO -->
+  <div class="section active" id="sec-0">
+    <div class="sec-header">
+      <span class="sec-num-badge">01</span>
+      <span class="sec-title">Fiado</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quantos clientes fiado ativos (mais ou menos)?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="qtd_clientes" id="qc1" value="menos50"><label class="opt-pill" for="qc1">Menos de 50</label>
+        <input class="opt-input" type="radio" name="qtd_clientes" id="qc2" value="50-100"><label class="opt-pill" for="qc2">50 – 100</label>
+        <input class="opt-input" type="radio" name="qtd_clientes" id="qc3" value="100-200"><label class="opt-pill" for="qc3">100 – 200</label>
+        <input class="opt-input" type="radio" name="qtd_clientes" id="qc4" value="200mais"><label class="opt-pill" for="qc4">200+</label>
+        <input class="opt-input" type="radio" name="qtd_clientes" id="qc5" value="naosabe"><label class="opt-pill" for="qc5">Não sabe</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem anota o fiado hoje?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="quem_anota" id="qa1" value="os6"><label class="opt-pill" for="qa1">Os 6</label>
+        <input class="opt-input" type="radio" name="quem_anota" id="qa2" value="so1"><label class="opt-pill" for="qa2">Só 1 responsável</label>
+        <input class="opt-input" type="radio" name="quem_anota" id="qa3" value="alguns"><label class="opt-pill" for="qa3">Alguns</label>
+        <input class="opt-input" type="radio" name="quem_anota" id="qa4" value="dono"><label class="opt-pill" for="qa4">O próprio dono</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">O que anota no fiado?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="o_que_anota" id="oa1" value="so_valor"><label class="opt-pill" for="oa1">Só o valor (R$)</label>
+        <input class="opt-input" type="radio" name="o_que_anota" id="oa2" value="itens"><label class="opt-pill" for="oa2">Itens também</label>
+        <input class="opt-input" type="radio" name="o_que_anota" id="oa3" value="depende"><label class="opt-pill" for="oa3">Depende</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Como o cliente costuma pagar? (pode marcar mais de 1)</label>
+      <div class="opt-group">
+        <input class="opt-input" type="checkbox" name="como_paga" id="cp1" value="dia_certo"><label class="opt-pill" for="cp1">Dia certo</label>
+        <input class="opt-input" type="checkbox" name="como_paga" id="cp2" value="tudo_vez"><label class="opt-pill" for="cp2">Tudo de uma vez</label>
+        <input class="opt-input" type="checkbox" name="como_paga" id="cp3" value="abate_parcial"><label class="opt-pill" for="cp3">Abate parcial</label>
+        <input class="opt-input" type="checkbox" name="como_paga" id="cp4" value="quando_pode"><label class="opt-pill" for="cp4">Quando pode</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quanto perde de fiado que não volta por mês?</label>
+      <input class="text-input" type="text" id="perda_fiado" placeholder="Ex: uns R$ 500, quase nada, não sei...">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Tem limite de fiado por cliente?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="limite_fiado" id="lf1" value="sim"><label class="opt-pill" for="lf1">Sim, tem limite</label>
+        <input class="opt-input" type="radio" name="limite_fiado" id="lf2" value="nao"><label class="opt-pill" for="lf2">Não</label>
+        <input class="opt-input" type="radio" name="limite_fiado" id="lf3" value="feeling"><label class="opt-pill" for="lf3">No feeling</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Familiar pode comprar na conta do cliente?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="familiar_fiado" id="ff1" value="sim"><label class="opt-pill" for="ff1">Sim</label>
+        <input class="opt-input" type="radio" name="familiar_fiado" id="ff2" value="nao"><label class="opt-pill" for="ff2">Não</label>
+        <input class="opt-input" type="radio" name="familiar_fiado" id="ff3" value="as_vezes"><label class="opt-pill" for="ff3">Às vezes</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quem pode apagar ou perdoar uma dívida?</label>
+      <input class="text-input" type="text" id="quem_perdoa" placeholder="Ex: só eu, qualquer vendedor...">
+    </div>
+  </div>
+
+  <!-- 02 CAIXA -->
+  <div class="section" id="sec-1">
+    <div class="sec-header">
+      <span class="sec-num-badge">02</span>
+      <span class="sec-title">Caixa e recebimento</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Como você confere se o dinheiro do dia bateu?</label>
+      <textarea class="text-input" id="confere_dia" placeholder="Descreve como funciona hoje..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">O PIX cai em qual conta?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="pix_conta" id="px1" value="pessoal"><label class="opt-pill" for="px1">Pessoal</label>
+        <input class="opt-input" type="radio" name="pix_conta" id="px2" value="loja"><label class="opt-pill" for="px2">Da loja</label>
+        <input class="opt-input" type="radio" name="pix_conta" id="px3" value="misto"><label class="opt-pill" for="px3">Misto / depende</label>
+        <input class="opt-input" type="radio" name="pix_conta" id="px4" value="vendedor"><label class="opt-pill" for="px4">Cada vendedor tem o seu</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Compra mista (parte PIX + parte fiado) — como anota hoje?</label>
+      <textarea class="text-input" id="compra_mista" placeholder="Ex: anota só o fiado, faz dois lançamentos..."></textarea>
+    </div>
+  </div>
+
+  <!-- 03 EQUIPE -->
+  <div class="section" id="sec-2">
+    <div class="sec-header">
+      <span class="sec-num-badge">03</span>
+      <span class="sec-title">Equipe</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Os 6 ganham como?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="remuneracao" id="r1" value="fixo"><label class="opt-pill" for="r1">Fixo</label>
+        <input class="opt-input" type="radio" name="remuneracao" id="r2" value="comissao"><label class="opt-pill" for="r2">Comissão</label>
+        <input class="opt-input" type="radio" name="remuneracao" id="r3" value="misto"><label class="opt-pill" for="r3">Fixo + comissão</label>
+        <input class="opt-input" type="radio" name="remuneracao" id="r4" value="varia"><label class="opt-pill" for="r4">Varia por cada um</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Funcionário consome produto da loja?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="consumo_func" id="cf1" value="sim_anota"><label class="opt-pill" for="cf1">Sim, anota</label>
+        <input class="opt-input" type="radio" name="consumo_func" id="cf2" value="sim_sem_anotar"><label class="opt-pill" for="cf2">Sim, sem anotar</label>
+        <input class="opt-input" type="radio" name="consumo_func" id="cf3" value="nao"><label class="opt-pill" for="cf3">Não acontece</label>
+        <input class="opt-input" type="radio" name="consumo_func" id="cf4" value="as_vezes"><label class="opt-pill" for="cf4">Às vezes</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quando você não está, quem toma conta?</label>
+      <input class="text-input" type="text" id="responsavel_ausencia" placeholder="Nome ou cargo...">
+    </div>
+  </div>
+
+  <!-- 04 COMPRAS -->
+  <div class="section" id="sec-3">
+    <div class="sec-header">
+      <span class="sec-num-badge">04</span>
+      <span class="sec-title">Compras e fornecedor</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Compra do frigorífico — à vista ou a prazo?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="compra_prazo" id="cp_1" value="avista"><label class="opt-pill" for="cp_1">Sempre à vista</label>
+        <input class="opt-input" type="radio" name="compra_prazo" id="cp_2" value="prazo"><label class="opt-pill" for="cp_2">A prazo</label>
+        <input class="opt-input" type="radio" name="compra_prazo" id="cp_3" value="misto"><label class="opt-pill" for="cp_3">Misto</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Você sabe o custo por kg e o rendimento do boi?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="sabe_custo" id="sc1" value="sei_exato"><label class="opt-pill" for="sc1">Sei com precisão</label>
+        <input class="opt-input" type="radio" name="sabe_custo" id="sc2" value="estimo"><label class="opt-pill" for="sc2">Estimo</label>
+        <input class="opt-input" type="radio" name="sabe_custo" id="sc3" value="naosabe"><label class="opt-pill" for="sc3">Não sei</label>
+      </div>
+      <input class="text-input mt8" type="text" id="detalhe_custo" placeholder="Custo/kg e rendimento se souber...">
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quanto vira linguiça / charque por semana?</label>
+      <input class="text-input" type="text" id="producao_semanal" placeholder="Ex: uns 50 kg de linguiça, 20 de charque...">
+    </div>
+  </div>
+
+  <!-- 05 NEGÓCIO -->
+  <div class="section" id="sec-4">
+    <div class="sec-header">
+      <span class="sec-num-badge">05</span>
+      <span class="sec-title">Negócio geral</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Se resolvesse só UMA coisa com o sistema, qual seria?</label>
+      <textarea class="text-input" id="prioridade_1" placeholder="A resposta dele, nas palavras dele..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Faturamento por mês (mais ou menos)</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="faturamento" id="fat1" value="50-100k"><label class="opt-pill" for="fat1">R$ 50–100k</label>
+        <input class="opt-input" type="radio" name="faturamento" id="fat2" value="100-150k"><label class="opt-pill" for="fat2">R$ 100–150k</label>
+        <input class="opt-input" type="radio" name="faturamento" id="fat3" value="150-200k"><label class="opt-pill" for="fat3">R$ 150–200k</label>
+        <input class="opt-input" type="radio" name="faturamento" id="fat4" value="200kplus"><label class="opt-pill" for="fat4">R$ 200k+</label>
+        <input class="opt-input" type="radio" name="faturamento" id="fat5" value="naosabe"><label class="opt-pill" for="fat5">Não falou</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Você sabe a margem de verdade?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="sabe_margem" id="sm1" value="sabe"><label class="opt-pill" for="sm1">Sei com precisão</label>
+        <input class="opt-input" type="radio" name="sabe_margem" id="sm2" value="estimo"><label class="opt-pill" for="sm2">Estimo / chuto</label>
+        <input class="opt-input" type="radio" name="sabe_margem" id="sm3" value="naosabe"><label class="opt-pill" for="sm3">Não sei</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">Quais são as "outras" despesas? Tem outro negócio junto?</label>
+      <textarea class="text-input" id="outras_despesas" placeholder="Anotar o que ele disser..."></textarea>
+    </div>
+  </div>
+
+  <!-- 06 HARDWARE -->
+  <div class="section" id="sec-5">
+    <div class="sec-header">
+      <span class="sec-num-badge">06</span>
+      <span class="sec-title">Hardware</span>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">O que já tem hoje? (pode marcar mais de 1)</label>
+      <div class="opt-group">
+        <input class="opt-input" type="checkbox" name="hardware" id="hw1" value="pc"><label class="opt-pill" for="hw1">PC / Desktop</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw2" value="notebook"><label class="opt-pill" for="hw2">Notebook</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw3" value="tablet"><label class="opt-pill" for="hw3">Tablet</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw4" value="impressora"><label class="opt-pill" for="hw4">Impressora</label>
+        <input class="opt-input" type="checkbox" name="hardware" id="hw5" value="nenhum"><label class="opt-pill" for="hw5">Nenhum</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="q-label">A balança imprime etiqueta com peso e preço?</label>
+      <div class="opt-group">
+        <input class="opt-input" type="radio" name="balanca_etiqueta" id="be1" value="sim"><label class="opt-pill" for="be1">Sim</label>
+        <input class="opt-input" type="radio" name="balanca_etiqueta" id="be2" value="nao"><label class="opt-pill" for="be2">Não</label>
+        <input class="opt-input" type="radio" name="balanca_etiqueta" id="be3" value="naosei"><label class="opt-pill" for="be3">Não sei</label>
+      </div>
+      <input class="text-input mt8" type="text" id="balanca_marca" placeholder="Marca / modelo (se der pra ver)...">
+    </div>
+  </div>
+
+  <!-- 07 OBSERVAÇÕES -->
+  <div class="section" id="sec-6">
+    <div class="sec-header">
+      <span class="sec-num-badge">07</span>
+      <span class="sec-title">Observações no local</span>
+    </div>
+
+    <div class="obs-item">
+      <input class="obs-check-input" type="checkbox" id="obs1">
+      <label class="obs-check-label" for="obs1"><div class="obs-box">✓</div>Cronometrei uma venda do começo ao fim</label>
+    </div>
+    <div class="obs-item">
+      <input class="obs-check-input" type="checkbox" id="obs2">
+      <label class="obs-check-label" for="obs2"><div class="obs-box">✓</div>Fotografei o caderno de fiado aberto</label>
+    </div>
+    <div class="obs-item">
+      <input class="obs-check-input" type="checkbox" id="obs3">
+      <label class="obs-check-label" for="obs3"><div class="obs-box">✓</div>Identifiquei quem pega tech vs quem trava</label>
+    </div>
+    <div class="obs-item">
+      <input class="obs-check-input" type="checkbox" id="obs4">
+      <label class="obs-check-label" for="obs4"><div class="obs-box">✓</div>Observei onde aparece fila e o que trava</label>
+    </div>
+    <div class="obs-item">
+      <input class="obs-check-input" type="checkbox" id="obs5">
+      <label class="obs-check-label" for="obs5"><div class="obs-box">✓</div>Fotografei a balança (marca + modelo visível)</label>
+    </div>
+
+    <div class="q-block" style="margin-top:4px">
+      <label class="q-label">Notas da observação</label>
+      <textarea class="text-input" id="notas_obs" placeholder="Tempo de atendimento, ritmo, fila, ambiente..."></textarea>
+    </div>
+  </div>
+
+  <!-- 08 NOTAS + EXPORTAR -->
+  <div class="section" id="sec-7">
+    <div class="sec-header">
+      <span class="sec-num-badge">08</span>
+      <span class="sec-title">Notas livres</span>
+    </div>
+
+    <div class="q-block">
+      <textarea class="text-input" id="notas_livres" style="min-height:160px"
+        placeholder="Tudo que ficou de fora — frases dele, dores que apareceram de surpresa, insights, imprevistos..."></textarea>
+    </div>
+
+    <div class="export-section">
+      <button class="btn btn-primary" onclick="exportar()">Copiar respostas</button>
+      <button class="btn btn-danger" onclick="limpar()">Limpar tudo</button>
+      <div class="save-info" id="saveInfo">Salvo automaticamente neste dispositivo</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="btnAnterior" onclick="anterior()" disabled>← Voltar</button>
+  <button class="nav-btn next" id="btnProximo" onclick="proximo()">Próximo →</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const TOTAL = 8;
+  let atual = 0;
+
+  function ir(idx) {
+    salvar();
+    document.getElementById('sec-' + atual).classList.remove('active');
+    document.querySelectorAll('.tab-btn')[atual].classList.remove('active');
+    atual = idx;
+    document.getElementById('sec-' + atual).classList.add('active');
+    document.querySelectorAll('.tab-btn')[atual].classList.add('active');
+    document.querySelector('.main').scrollTop = 0;
+    atualizarNav();
+  }
+
+  function proximo() { if (atual < TOTAL - 1) ir(atual + 1); }
+  function anterior() { if (atual > 0) ir(atual - 1); }
+
+  function atualizarNav() {
+    document.getElementById('btnAnterior').disabled = atual === 0;
+    const btnP = document.getElementById('btnProximo');
+    if (atual === TOTAL - 1) {
+      btnP.textContent = 'Fim';
+      btnP.disabled = true;
+    } else {
+      btnP.textContent = 'Próximo →';
+      btnP.disabled = false;
+    }
+  }
+
+  // ── Coleta ──
+  function coletar() {
+    const d = {};
+    document.querySelectorAll('input[type=text], textarea').forEach(el => {
+      if (el.id) d[el.id] = el.value;
+    });
+    document.querySelectorAll('input[type=radio]:checked').forEach(el => {
+      d[el.name] = el.value;
+    });
+    const nomes = new Set();
+    document.querySelectorAll('input[type=checkbox][name]').forEach(el => nomes.add(el.name));
+    nomes.forEach(n => {
+      d[n] = [...document.querySelectorAll(`input[type=checkbox][name="${n}"]:checked`)].map(e => e.value);
+    });
+    ['obs1','obs2','obs3','obs4','obs5'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) d[id] = el.checked;
+    });
+    return d;
+  }
+
+  // ── Salvar ──
+  function salvar() {
+    try {
+      localStorage.setItem('lev_acougue', JSON.stringify(coletar()));
+      const agora = new Date();
+      const h = String(agora.getHours()).padStart(2,'0');
+      const m = String(agora.getMinutes()).padStart(2,'0');
+      const el = document.getElementById('saveInfo');
+      if (el) el.textContent = `Salvo às ${h}:${m}`;
+    } catch(e) {}
+    progresso();
+  }
+
+  // ── Restaurar ──
+  function restaurar() {
+    try {
+      const raw = localStorage.getItem('lev_acougue');
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      Object.entries(d).forEach(([k, v]) => {
+        const tel = document.getElementById(k);
+        if (tel && (tel.tagName === 'TEXTAREA' || tel.type === 'text')) { tel.value = v; return; }
+        if (typeof v === 'string') {
+          const r = document.querySelector(`input[type=radio][name="${k}"][value="${v}"]`);
+          if (r) { r.checked = true; return; }
+        }
+        if (Array.isArray(v)) {
+          v.forEach(val => {
+            const cb = document.querySelector(`input[type=checkbox][name="${k}"][value="${val}"]`);
+            if (cb) cb.checked = true;
+          });
+          return;
+        }
+        if (typeof v === 'boolean') {
+          const el = document.getElementById(k);
+          if (el) el.checked = v;
+        }
+      });
+    } catch(e) {}
+  }
+
+  // ── Progresso ──
+  const CAMPOS_CHAVE = [
+    'qtd_clientes','quem_anota','o_que_anota','como_paga','perda_fiado',
+    'limite_fiado','familiar_fiado','quem_perdoa','confere_dia','pix_conta',
+    'compra_mista','remuneracao','consumo_func','responsavel_ausencia',
+    'compra_prazo','sabe_custo','prioridade_1','faturamento','sabe_margem','balanca_etiqueta'
+  ];
+
+  function progresso() {
+    const d = coletar();
+    let ok = 0;
+    CAMPOS_CHAVE.forEach(c => {
+      const v = d[c];
+      if (Array.isArray(v) && v.length) ok++;
+      else if (typeof v === 'string' && v.trim()) ok++;
+    });
+    const pct = Math.round((ok / CAMPOS_CHAVE.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '%';
+    // Marca abas concluídas
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('done', i < atual && !btn.classList.contains('active'));
+    });
+  }
+
+  // ── Export ──
+  const NOMES = {
+    qtd_clientes:'Clientes fiado', quem_anota:'Quem anota', o_que_anota:'O que anota',
+    como_paga:'Como paga', perda_fiado:'Perda/mês', limite_fiado:'Limite por cliente',
+    familiar_fiado:'Familiar na conta', quem_perdoa:'Quem pode perdoar',
+    confere_dia:'Fechamento do dia', pix_conta:'PIX — conta', compra_mista:'Compra mista',
+    remuneracao:'Remuneração', consumo_func:'Consumo funcionário', responsavel_ausencia:'Responsável na ausência',
+    compra_prazo:'Fornecedor', sabe_custo:'Custo/rendimento', detalhe_custo:'Detalhe custo',
+    producao_semanal:'Produção semana', prioridade_1:'Prioridade #1', faturamento:'Faturamento',
+    sabe_margem:'Sabe margem', outras_despesas:'Outras despesas', hardware:'Hardware',
+    balanca_etiqueta:'Balança etiqueta', balanca_marca:'Balança marca',
+    notas_obs:'Obs. local', notas_livres:'Notas livres',
+    obs1:'✓ Cronometrou venda', obs2:'✓ Fotografou caderno',
+    obs3:'✓ Aptidão tech', obs4:'✓ Onde tem fila', obs5:'✓ Fotografou balança',
+  };
+
+  function exportar() {
+    const d = coletar();
+    const data = new Date().toLocaleDateString('pt-BR');
+    const linhas = [`DIAGNÓSTICO — AÇOUGUE SERTANEJO`, `Leandro · Jupi-PE · ${data}`, '─'.repeat(42), ''];
+    Object.entries(d).forEach(([k, v]) => {
+      const label = NOMES[k] || k;
+      let valor = '';
+      if (Array.isArray(v)) { if (!v.length) return; valor = v.join(', '); }
+      else if (typeof v === 'boolean') { if (!v) return; valor = 'Sim'; }
+      else if (typeof v === 'string' && v.trim()) { valor = v.trim(); }
+      else return;
+      linhas.push(`${label}: ${valor}`);
+    });
+    const texto = linhas.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(() => toast('Copiado!')).catch(() => fallback(texto));
+    } else { fallback(texto); }
+  }
+
+  function fallback(texto) {
+    const ta = document.createElement('textarea');
+    ta.value = texto;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); toast('Copiado!'); }
+    catch(e) { toast('Copie manualmente'); }
+    document.body.removeChild(ta);
+  }
+
+  function limpar() {
+    if (!confirm('Apagar todas as respostas?')) return;
+    localStorage.removeItem('lev_acougue');
+    document.querySelectorAll('input[type=text], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(el => el.checked = false);
+    progresso();
+    toast('Limpo.');
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  document.addEventListener('change', salvar);
+  document.addEventListener('input', salvar);
+  document.addEventListener('DOMContentLoaded', () => { restaurar(); progresso(); atualizarNav(); });
+</script>
+</body>
+</html>
