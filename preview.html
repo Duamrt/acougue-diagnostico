@@ -1318,7 +1318,7 @@
         right: 0;
         bottom: 0;
         display: grid;
-        grid-template-columns: repeat(9, 1fr);
+        grid-template-columns: repeat(10, 1fr);
         gap: 4px;
         background: var(--charcoal);
         border-top: 4px solid var(--gold);
@@ -1397,7 +1397,7 @@
   </style>
 </head>
 <body>
-  <section class="login-screen" id="loginScreen">
+  <section class="login-screen is-hidden" id="loginScreen">
     <div class="login-brand">
       <div class="system-mark">
         <div class="kicker">Sistema de balcão e gestão</div>
@@ -1441,7 +1441,7 @@
     </div>
   </section>
 
-  <div class="shell is-hidden" id="appShell">
+  <div class="shell" id="appShell">
     <aside class="sidebar">
       <div class="brand">
         <div class="kicker">Balcão Forte</div>
@@ -1459,6 +1459,7 @@
         <button data-view="compras"><span class="nav-mark">07</span>Compras</button>
         <button data-view="producao"><span class="nav-mark">08</span>Produção</button>
         <button data-view="vendedores"><span class="nav-mark">09</span>Equipe</button>
+        <button data-view="login"><span class="nav-mark">10</span>Login</button>
       </nav>
 
       <div class="sidebar-footer">Visão do dono. Outros usuários enxergam só o que a permissão liberar.</div>
@@ -1919,7 +1920,7 @@
     </section>
   </div>
 
-  <nav class="mobile-nav is-hidden" id="mobileNav">
+  <nav class="mobile-nav" id="mobileNav">
     <button class="active" data-view="dashboard">Dono</button>
     <button data-view="config">Acesso</button>
     <button data-view="clientes">Clientes</button>
@@ -1929,6 +1930,7 @@
     <button data-view="compras">Compras</button>
     <button data-view="producao">Produção</button>
     <button data-view="vendedores">Equipe</button>
+    <button data-view="login">Login</button>
   </nav>
 
   <script>
@@ -1941,10 +1943,20 @@
       vendedores: ['Equipe', 'Venda por vendedor', 'Métrica para comissão sem quebrar o trabalho em equipe.'],
       compras: ['Fornecedor', 'Compras e contas a pagar', 'Vencimentos, compra a prazo e custo entrando no controle.'],
       producao: ['Produção própria', 'Linguiça, charque e perdas', 'Controle por categoria e valor, sem virar estoque impossível.'],
-      config: ['Base do sistema', 'Configurações e permissões', 'Cada usuário tem senha própria e cada ação sensível fica registrada.']
+      config: ['Base do sistema', 'Configurações e permissões', 'Cada usuário tem senha própria e cada ação sensível fica registrada.'],
+      login: ['Acesso', 'Tela de login', 'Entrada individual por usuário, com permissões e auditoria no banco.']
     };
 
     function setView(id) {
+      if (id === 'login') {
+        document.getElementById('loginScreen').classList.remove('is-hidden');
+        document.getElementById('appShell').classList.add('is-hidden');
+        document.getElementById('mobileNav').classList.add('is-hidden');
+        return;
+      }
+      document.getElementById('loginScreen').classList.add('is-hidden');
+      document.getElementById('appShell').classList.remove('is-hidden');
+      document.getElementById('mobileNav').classList.remove('is-hidden');
       document.querySelectorAll('.view').forEach(view => view.classList.toggle('active', view.id === id));
       document.querySelectorAll('[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === id));
       document.getElementById('viewKicker').textContent = meta[id][0];
